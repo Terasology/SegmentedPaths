@@ -28,6 +28,8 @@ import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.segmentedpaths.blocks.PathFamily;
 import org.terasology.segmentedpaths.components.SegmentEntityComponent;
+import org.terasology.segmentedpaths.events.OnExitSegment;
+import org.terasology.segmentedpaths.events.OnVisitSegment;
 import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.family.BlockFamily;
 
@@ -132,6 +134,8 @@ public class SegmentSystem extends BaseComponentSystem {
         Vector3f p1 = this.segmentPosition(vehicle.segmentEntity);
         Quat4f q1 = this.segmentRotation(vehicle.segmentEntity);
 
+        EntityRef oldSegmentEntity = vehicle.segmentEntity;
+
         float t = vehicle.t + deltaT;
         if (t < 0) {
             float result = -t;
@@ -178,6 +182,10 @@ public class SegmentSystem extends BaseComponentSystem {
             vehicle.descriptor = segmentPair.prefab;
         } else {
             vehicle.t = t;
+        }
+        if(oldSegmentEntity != vehicle.segmentEntity){
+            oldSegmentEntity.send(new OnExitSegment(oldSegmentEntity));
+            oldSegmentEntity.send(new OnVisitSegment(vehicle.segmentEntity));
         }
 
         vehicleEntity.saveComponent(vehicle);
