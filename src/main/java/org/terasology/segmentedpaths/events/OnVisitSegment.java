@@ -19,13 +19,13 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
 public class OnVisitSegment implements Event {
-    private EntityRef blockEntityRef;
+    private EntityRef segmentEntity;
 
-    public OnVisitSegment(EntityRef blockEntityRef){
-        this.blockEntityRef = blockEntityRef;
+    public OnVisitSegment(EntityRef segmentEntity){
+        this.segmentEntity = segmentEntity;
     }
 
-    public EntityRef getBlockEntityRef() {
-        return blockEntityRef;
+    public EntityRef getSegmentEntity() {
+        return segmentEntity;
     }
 }

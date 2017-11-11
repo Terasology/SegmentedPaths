@@ -20,13 +20,13 @@ import org.terasology.entitySystem.event.Event;
 
 public class OnExitSegment implements Event {
 
-    private EntityRef blockEntityRef;
+    private EntityRef segmentEntity;
 
-    public OnExitSegment(EntityRef blockEntityRef){
-        this.blockEntityRef = blockEntityRef;
+    public OnExitSegment(EntityRef segmentEntity){
+        this.segmentEntity = segmentEntity;
     }
 
-    public EntityRef getBlockEntityRef() {
-        return blockEntityRef;
+    public EntityRef getSegmentEntity() {
+        return segmentEntity;
     }
 }

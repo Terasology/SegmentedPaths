@@ -184,8 +184,8 @@ public class SegmentSystem extends BaseComponentSystem {
             vehicle.t = t;
         }
         if(oldSegmentEntity != vehicle.segmentEntity){
-            oldSegmentEntity.send(new OnExitSegment(oldSegmentEntity));
-            oldSegmentEntity.send(new OnVisitSegment(vehicle.segmentEntity));
+            oldSegmentEntity.send(new OnExitSegment(vehicleEntity));
+            vehicle.segmentEntity.send(new OnVisitSegment(vehicleEntity));
         }
 
         vehicleEntity.saveComponent(vehicle);
