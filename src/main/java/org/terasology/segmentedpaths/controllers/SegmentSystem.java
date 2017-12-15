@@ -40,7 +40,7 @@ import org.terasology.world.block.family.BlockFamily;
 @Share(value = SegmentSystem.class)
 public class SegmentSystem extends BaseComponentSystem {
 
-    public static final float MATCH_EPSILON = .09f;
+    public static final float MATCH_EPSILON = .09f * .09f;
 
     public enum JointMatch {
         Start_End,
@@ -199,13 +199,13 @@ public class SegmentSystem extends BaseComponentSystem {
         Vector3f s2 = next.point(0, 0, p2, r2);
         Vector3f e2 = next.point(next.maxIndex(), 1, p2, r2);
 
-        if (s1.distance(s2) < MATCH_EPSILON)
+        if (s1.distanceSquared(s2) < MATCH_EPSILON)
             return JointMatch.Start_Start;
-        if (s1.distance(e2) < MATCH_EPSILON)
+        if (s1.distanceSquared(e2) < MATCH_EPSILON)
             return JointMatch.Start_End;
-        if (e1.distance(s2) < MATCH_EPSILON)
+        if (e1.distanceSquared(s2) < MATCH_EPSILON)
             return JointMatch.End_Start;
-        if (e1.distance(e2) < MATCH_EPSILON)
+        if (e1.distanceSquared(e2) < MATCH_EPSILON)
             return JointMatch.End_End;
         return JointMatch.None;
     }
