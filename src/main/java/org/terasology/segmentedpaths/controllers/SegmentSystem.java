@@ -92,16 +92,20 @@ public class SegmentSystem extends BaseComponentSystem {
         Segment vehicleSegment = segmentCacheSystem.getSegment(vehicle.descriptor);
         int index = vehicleSegment.index(vehicle.segmentPosition);
         Quat4f rotation = this.segmentRotation(vehicle.segmentEntity);
-        return vehicleSegment.tangent(index, vehicleSegment.t(index, vehicle.segmentPosition), rotation);
+        return vehicleSegment.tangent(index, vehicleSegment.getSegmentPosition(index, vehicle.segmentPosition), rotation);
+    }
+
+    public Vector3f vehiclePoint(EntityRef vehicleEntity, float segmentPositionOffset) {
+        PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
+        Segment vehicleSegment = segmentCacheSystem.getSegment(vehicle.descriptor);
+        int index = vehicleSegment.index(vehicle.segmentPosition + segmentPositionOffset);
+        Quat4f rotation = this.segmentRotation(vehicle.segmentEntity);
+        Vector3f position = this.segmentPosition(vehicle.segmentEntity);
+        return vehicleSegment.point(index, vehicleSegment.getSegmentPosition(index, vehicle.segmentPosition + segmentPositionOffset), position, rotation);
     }
 
     public Vector3f vehiclePoint(EntityRef vehicleEntity) {
-        PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
-        Segment vehicleSegment = segmentCacheSystem.getSegment(vehicle.descriptor);
-        int index = vehicleSegment.index(vehicle.segmentPosition);
-        Quat4f rotation = this.segmentRotation(vehicle.segmentEntity);
-        Vector3f position = this.segmentPosition(vehicle.segmentEntity);
-        return vehicleSegment.point(index, vehicleSegment.t(index, vehicle.segmentPosition), position, rotation);
+        return vehiclePoint(vehicleEntity, 0);
     }
 
     public Vector3f vehicleNormal(EntityRef vehicleEntity) {
@@ -110,10 +114,10 @@ public class SegmentSystem extends BaseComponentSystem {
         int index = vehicleSegment.index(vehicle.segmentPosition);
         Quat4f rotation = this.segmentRotation(vehicle.segmentEntity);
         Vector3f position = this.segmentPosition(vehicle.segmentEntity);
-        return vehicleSegment.normal(index, vehicleSegment.t(index, vehicle.segmentPosition), rotation);
+        return vehicleSegment.normal(index, vehicleSegment.getSegmentPosition(index, vehicle.segmentPosition), rotation);
     }
 
-    public boolean isvehicleValid(EntityRef vehicleEntity) {
+    public boolean isVehicleValid(EntityRef vehicleEntity) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
         if (vehicle == null)
             return false;
@@ -124,11 +128,11 @@ public class SegmentSystem extends BaseComponentSystem {
         return true;
     }
 
-    public boolean move(EntityRef vehicleEntity, float tDelta, SegmentMapping mapping) {
+    public boolean move(EntityRef vehicleEntity, EntityRef axle, float tDelta, SegmentMapping mapping) {
         if (tDelta == 0)
             return true;
-        float deltaT = calculateDeltaT(vehicleEntity, tDelta, true);
-        PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
+        float deltaT = calculateDeltaT(axle, tDelta, true);
+        PathFollowerComponent vehicle = axle.getComponent(PathFollowerComponent.class);
         Segment current = segmentCacheSystem.getSegment(vehicle.descriptor);
 
         Vector3f p1 = this.segmentPosition(vehicle.segmentEntity);
@@ -183,12 +187,12 @@ public class SegmentSystem extends BaseComponentSystem {
         } else {
             vehicle.segmentPosition = t;
         }
-        if(oldSegmentEntity != vehicle.segmentEntity){
+        if (oldSegmentEntity != vehicle.segmentEntity) {
             oldSegmentEntity.send(new OnExitSegment(vehicleEntity));
             vehicle.segmentEntity.send(new OnVisitSegment(vehicleEntity));
         }
 
-        vehicleEntity.saveComponent(vehicle);
+        axle.saveComponent(vehicle);
         return true;
     }
 
