@@ -68,11 +68,11 @@ public class Segment {
         }
     }
 
-    public int index(float t) {
-        if (t < 0)
+    public int index(float segmentPosition) {
+        if (segmentPosition < 0)
             return 0;
         for (int x = 0; x < argLengths.length; x++) {
-            if (t < argLengths[x]) {
+            if (segmentPosition < argLengths[x]) {
                 return x;
             }
         }
@@ -84,14 +84,14 @@ public class Segment {
     }
 
 
-    public float t(int index, float t) {
+    public float getSegmentPosition(int index, float segmentPosition) {
         if (index - 1 < 0) {
-            return (t / argLengths[0]);
+            return (segmentPosition / argLengths[0]);
         }
-        return ((t - argLengths[index - 1]) / (argLengths[index - 1] - argLengths[index]));
+        return ((segmentPosition - argLengths[index - 1]) / (argLengths[index - 1] - argLengths[index]));
     }
 
-    public float nearestT(Vector3f pos, Vector3f position, Quat4f rotation) {
+    public float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quat4f segmentRotation) {
         if (this.curves.length == 0)
             return 0f;
 
@@ -99,10 +99,10 @@ public class Segment {
         float closest = Float.MAX_VALUE;
 
         float tvalue = 0f;
-        Vector3f previous = point(0, 0,position,rotation);// curves[0].getPoint(0);
+        Vector3f previous = point(0, 0, segmentPosition, segmentRotation);
         for (int x = 0; x < curves.length; x++) {
             for (int y = 0; y <= ARC_SEGMENT_ITERATIONS; y++) {
-                Vector3f current = point(x, y / ARC_SEGMENT_ITERATIONS,position,rotation);
+                Vector3f current = point(x, y / ARC_SEGMENT_ITERATIONS, segmentPosition, segmentRotation);
                 tvalue += current.distance(previous);
                 previous = current;
 

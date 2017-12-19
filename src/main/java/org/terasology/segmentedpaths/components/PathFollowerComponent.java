@@ -22,15 +22,27 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.network.Replicate;
 
 /**
- * Created by michaelpollind on 4/9/17.
+ * Used to create entities that follow paths.
  */
-public class SegmentEntityComponent implements Component {
+public class PathFollowerComponent implements Component {
+    /**
+     * The position of this path follower entity along the current segment, ranges from 0 (start) to 1 (end).
+     */
     @Replicate
-    public float t = 0;
+    public float segmentPosition;
+    /**
+     * Descriptor for the currently followed path that stores possible paths.
+     */
     @Replicate
     public Prefab descriptor;
+    /**
+     * The entity of the segment currently being followed
+     */
     @Replicate
     public EntityRef segmentEntity;
+    /**
+     * The heading (forward-facing look) vector of the path follower in it's current position along a segment.
+     */
     @Replicate
     public Vector3f heading;
 }

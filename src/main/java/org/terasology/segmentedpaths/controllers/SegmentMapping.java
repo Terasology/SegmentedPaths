@@ -17,7 +17,7 @@ package org.terasology.segmentedpaths.controllers;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.segmentedpaths.components.SegmentEntityComponent;
+import org.terasology.segmentedpaths.components.PathFollowerComponent;
 
 /**
  * Created by michaelpollind on 4/5/17.
@@ -36,6 +36,6 @@ public interface SegmentMapping {
         S1,S2
     }
 
-    SegmentPair nextSegment(SegmentEntityComponent vehicle, SegmentEnd ends);
+    SegmentPair nextSegment(PathFollowerComponent vehicle, SegmentEnd ends);
 
 }

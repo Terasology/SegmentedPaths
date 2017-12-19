@@ -19,8 +19,12 @@ import org.terasology.math.Rotation;
 import org.terasology.world.block.BlockUri;
 
 /**
- * Created by michaelpollind on 4/5/17.
+ * To be implemented by blocks that use the segment system.
+ * Used by the segment system to get the rotation of the segment for the associated block.
  */
 public interface PathFamily {
+    /**
+     * @return the rotation of the segment for the associated block.
+     */
     Rotation getRotationFor(BlockUri blockUri);
 }
