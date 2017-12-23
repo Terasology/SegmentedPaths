@@ -33,7 +33,7 @@ import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.family.BlockFamily;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
-@Share(value = PathFollowerSystem.class)
+@Share(value = SegmentSystem.class)
 public class SegmentSystem extends BaseComponentSystem {
     public enum JointMatch {
         Start_End,
@@ -76,7 +76,7 @@ public class SegmentSystem extends BaseComponentSystem {
 
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
 
-        if (Math.abs(delta + segmentMeta.position) < segment.maxDistance()) {
+        if (delta + segmentMeta.position > 0 &&  delta + segmentMeta.position < segment.maxDistance()) {
             segmentMeta.position = delta + segmentMeta.position;
             return true;
         } else {
@@ -87,12 +87,12 @@ public class SegmentSystem extends BaseComponentSystem {
             Vector3f p1 = this.segmentPosition(segmentMeta);
             Quat4f q1 = this.segmentRotation(segmentMeta);
 
-            if (Math.abs(delta + segmentMeta.position) < segment.maxDistance()) {
+            if (delta + segmentMeta.position > 0 &&  delta + segmentMeta.position < segment.maxDistance()) {
                 segmentMeta.position = delta + segmentMeta.position;
                 return true;
             }
 
-            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta.association, segment, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
+            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
             delta -= segment.maxDistance() * Math.signum(delta);
             if (mappingResult == null)
                 return false;

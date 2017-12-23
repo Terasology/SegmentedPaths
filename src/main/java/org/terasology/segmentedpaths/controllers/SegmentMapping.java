@@ -18,6 +18,7 @@ package org.terasology.segmentedpaths.controllers;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.segmentedpaths.Segment;
+import org.terasology.segmentedpaths.SegmentMeta;
 
 /**
  * Created by michaelpollind on 4/5/17.
@@ -36,6 +37,6 @@ public interface SegmentMapping {
         START, END
     }
 
-    MappingResult nextSegment(EntityRef entityRef,Segment segment, SegmentEnd ends);
+    MappingResult nextSegment(SegmentMeta meta, SegmentEnd ends);
 
 }

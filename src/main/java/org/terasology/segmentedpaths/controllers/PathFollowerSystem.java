@@ -40,8 +40,6 @@ import org.terasology.world.block.family.BlockFamily;
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(value = PathFollowerSystem.class)
 public class PathFollowerSystem extends BaseComponentSystem {
-    public static final float MATCH_EPSILON = .09f * .09f;
-
     @In
     SegmentSystem segmentSystem;
 
