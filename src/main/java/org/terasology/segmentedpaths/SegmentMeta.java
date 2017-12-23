@@ -29,6 +29,9 @@ public class SegmentMeta {
     @Replicate
     public Prefab prefab;
 
+    public SegmentMeta(){
+
+    }
     public SegmentMeta(SegmentMeta meta){
         this.position = meta.position;
         this.association = meta.association;

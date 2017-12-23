@@ -75,29 +75,24 @@ public class SegmentSystem extends BaseComponentSystem {
     public boolean updateSegmentMeta(SegmentMeta segmentMeta, float delta, SegmentMapping mapping) {
 
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
-        EntityRef entityRef = segmentMeta.association;
-        Prefab prefab = segmentMeta.prefab;
-        float position = segmentMeta.position;
 
-        if (Math.abs(delta + position) < segment.maxDistance()) {
-            segmentMeta.position = delta + position;
+        if (Math.abs(delta + segmentMeta.position) < segment.maxDistance()) {
+            segmentMeta.position = delta + segmentMeta.position;
             return true;
         } else {
-            delta -= position * Math.signum(delta);
+            delta -= segmentMeta.position * Math.signum(delta);
         }
 
         while (true) {
-            Vector3f p1 = this.segmentPosition(entityRef);
-            Quat4f q1 = this.segmentRotation(entityRef);
+            Vector3f p1 = this.segmentPosition(segmentMeta);
+            Quat4f q1 = this.segmentRotation(segmentMeta);
 
-            if (Math.abs(delta + position) < segment.maxDistance()) {
-                segmentMeta.position = delta + position;
-                segmentMeta.association = entityRef;
-                segmentMeta.prefab = prefab;
+            if (Math.abs(delta + segmentMeta.position) < segment.maxDistance()) {
+                segmentMeta.position = delta + segmentMeta.position;
                 return true;
             }
 
-            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(entityRef, segment, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
+            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta.association, segment, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
             delta -= segment.maxDistance() * Math.signum(delta);
             if (mappingResult == null)
                 return false;
@@ -110,25 +105,25 @@ public class SegmentSystem extends BaseComponentSystem {
             JointMatch match = this.segmentMatch(segment, p1, q1, nextSegment, p2, q2);
             switch (match) {
                 case Start_End:
-                    position = nextSegment.maxDistance();
+                    segmentMeta.position = nextSegment.maxDistance();
                     break;
                 case Start_Start:
-                    position = 0;
+                    segmentMeta.position = 0;
                     delta *= -1;
                     break;
                 case End_End:
                     delta *= -1;
-                    position = nextSegment.maxDistance();
+                    segmentMeta.position = nextSegment.maxDistance();
                     break;
                 case End_Start:
-                    position = 0;
+                    segmentMeta.position = 0;
                     break;
                 default:
                     return false;
             }
             segment = nextSegment;
-            entityRef = mappingResult.entity;
-            prefab = mappingResult.prefab;
+            segmentMeta.prefab = mappingResult.prefab;
+            segmentMeta.association = mappingResult.entity;
         }
     }
 
