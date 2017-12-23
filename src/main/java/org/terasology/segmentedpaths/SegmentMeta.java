@@ -13,29 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.segmentedpaths.controllers;
+package org.terasology.segmentedpaths;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.segmentedpaths.Segment;
+import org.terasology.network.Replicate;
+import org.terasology.reflection.MappedContainer;
 
-/**
- * Created by michaelpollind on 4/5/17.
- */
-public interface SegmentMapping {
-    class MappingResult{
-        public  MappingResult(Prefab prefab,EntityRef entity){
-            this.prefab = prefab;
-            this.entity = entity;
-        }
-        Prefab prefab;
-        EntityRef entity;
+@MappedContainer
+public class SegmentMeta {
+    @Replicate
+    public float position;
+    @Replicate
+    public EntityRef association;
+    @Replicate
+    public Prefab prefab;
+
+    public SegmentMeta(SegmentMeta meta){
+        this.position = meta.position;
+        this.association = meta.association;
+        this.prefab = meta.prefab;
     }
 
-    enum SegmentEnd{
-        START, END
+    public SegmentMeta(float position, EntityRef association, Prefab prefab){
+        this.prefab= prefab;
+        this.association = association;
+        this.position = position;
     }
-
-    MappingResult nextSegment(EntityRef entityRef,Segment segment, SegmentEnd ends);
-
 }
