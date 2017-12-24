@@ -3,7 +3,7 @@
        "s1" : "RIGHT",
        "s2" : "FRONT"
     },
-    "Path" : {
+    "CurvedPath" : {
         "path" : [
                {
                    "f1": [0.500,-0.468750,0],

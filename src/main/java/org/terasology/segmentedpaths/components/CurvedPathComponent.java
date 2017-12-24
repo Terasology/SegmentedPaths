@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.segmentedpaths.controllers;
+package org.terasology.segmentedpaths.components;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.segmentedpaths.SegmentMeta;
+import org.terasology.entitySystem.Component;
+import org.terasology.math.geom.Vector3f;
+import org.terasology.reflection.MappedContainer;
+
+import java.util.List;
 
 /**
- * Created by michaelpollind on 4/5/17.
+ * Created by michaelpollind on 4/3/17.
  */
-public interface SegmentMapping {
-    class MappingResult{
-        public  MappingResult(Prefab prefab,EntityRef entity){
-            this.prefab = prefab;
-            this.entity = entity;
-        }
-        Prefab prefab;
-        EntityRef entity;
+public class CurvedPathComponent implements Component {
+    public List<CurvedPathComponent.CubicBezier> path;
+    public Vector3f startingBinormal;
+    public float rotation;
+
+    @MappedContainer
+    public static class CubicBezier {
+        public Vector3f f1;
+        public Vector3f f2;
+        public Vector3f f3;
+        public Vector3f f4;
     }
-
-    enum SegmentEnd{
-        START, END
-    }
-
-    MappingResult nextSegment(SegmentMeta meta, SegmentEnd ends);
-
 }

@@ -21,19 +21,11 @@ import org.terasology.reflection.MappedContainer;
 
 import java.util.List;
 
-/**
- * Created by michaelpollind on 4/3/17.
- */
-public class PathComponent implements Component {
-    public List<PathComponent.CubicBezier> path;
-    public Vector3f startingBinormal;
-    public float rotation;
-
+public class LinearPathComponent implements Component {
+    public List<Linear> path;
     @MappedContainer
-    public static class CubicBezier {
-        public Vector3f f1;
-        public Vector3f f2;
-        public Vector3f f3;
-        public Vector3f f4;
+    public static class Linear {
+        public Vector3f point;
+        public Vector3f binormal;
     }
 }
