@@ -76,7 +76,28 @@ public class LinearSegment implements Segment {
 
     @Override
     public float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quat4f segmentRotation) {
-        return 0;
+        if (this.linearPoints.length == 0)
+            return 0f;
+
+        float result = 0;
+        float closest = Float.MAX_VALUE;
+
+        float tvalue = 0f;
+        Vector3f previous = point(0, 0, segmentPosition, segmentRotation);
+        for (int x = 0; x < arcLengths.length; x++) {
+            for (int y = 0; y <= 100; y++) {
+                Vector3f current = point(x, y / (float)100, segmentPosition, segmentRotation);
+                tvalue += current.distance(previous);
+                previous = current;
+
+                float distance = current.distance(pos);
+                if (distance < closest) {
+                    closest = distance;
+                    result = tvalue;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
