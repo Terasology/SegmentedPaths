@@ -64,20 +64,19 @@ public class PathFollowerSystem extends BaseComponentSystem {
     }
 
     public Vector3f vehicleTangent(EntityRef vehicleEntity) {
-        return vehicleTangent(vehicleEntity,0,null);
+        return vehicleTangent(vehicleEntity, 0, null);
     }
 
-    public Vector3f vehicleTangent(EntityRef vehicleEntity, float delta,SegmentMapping mapping) {
+    public Vector3f vehicleTangent(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
-        if(delta == 0 || mapping == null){
+        if (delta == 0 || mapping == null) {
             Segment segment = segmentCacheSystem.getSegment(vehicle.segmentMeta.prefab);
             int index = segment.index(vehicle.segmentMeta.position);
             Quat4f rotation = segmentSystem.segmentRotation(vehicle.segmentMeta);
             return segment.tangent(index, segment.getSegmentPosition(index, vehicle.segmentMeta.position), rotation);
         }
         SegmentMeta meta = new SegmentMeta(vehicle.segmentMeta);
-        if(this.segmentSystem.updateSegmentMeta(meta,delta,mapping))
-        {
+        if (this.segmentSystem.updateSegmentMeta(meta, delta, mapping)) {
             Segment segment = segmentCacheSystem.getSegment(meta.prefab);
             int index = segment.index(meta.position);
             Quat4f rotation = segmentSystem.segmentRotation(meta);
@@ -87,47 +86,44 @@ public class PathFollowerSystem extends BaseComponentSystem {
     }
 
     public Vector3f vehiclePoint(EntityRef vehicleEntity) {
-        return vehiclePoint(vehicleEntity,0,null);
+        return vehiclePoint(vehicleEntity, 0, null);
     }
 
-    public Vector3f vehiclePoint(EntityRef vehicleEntity, float delta,SegmentMapping mapping) {
+    public Vector3f vehiclePoint(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
-        if(delta == 0 || mapping == null){
+        if (delta == 0 || mapping == null) {
             Segment segment = segmentCacheSystem.getSegment(vehicle.segmentMeta.prefab);
             int index = segment.index(vehicle.segmentMeta.position);
             Quat4f rotation = segmentSystem.segmentRotation(vehicle.segmentMeta);
-            Vector3f position  = segmentSystem.segmentPosition(vehicle.segmentMeta);
-            return segment.point(index, segment.getSegmentPosition(index, vehicle.segmentMeta.position),position, rotation);
+            Vector3f position = segmentSystem.segmentPosition(vehicle.segmentMeta);
+            return segment.point(index, segment.getSegmentPosition(index, vehicle.segmentMeta.position), position, rotation);
         }
         SegmentMeta meta = new SegmentMeta(vehicle.segmentMeta);
-        if(this.segmentSystem.updateSegmentMeta(meta,delta,mapping))
-        {
+        if (this.segmentSystem.updateSegmentMeta(meta, delta, mapping)) {
             Segment segment = segmentCacheSystem.getSegment(meta.prefab);
             int index = segment.index(meta.position);
             Quat4f rotation = segmentSystem.segmentRotation(meta);
-            Vector3f position  = segmentSystem.segmentPosition(meta);
-            return segment.point(index, segment.getSegmentPosition(index, meta.position),position, rotation);
+            Vector3f position = segmentSystem.segmentPosition(meta);
+            return segment.point(index, segment.getSegmentPosition(index, meta.position), position, rotation);
         }
         return null;
     }
 
 
-
     public Vector3f vehicleNormal(EntityRef vehicleEntity) {
-        return this.vehicleNormal(vehicleEntity,0,null);
+        return this.vehicleNormal(vehicleEntity, 0, null);
     }
 
-    public Vector3f vehicleNormal(EntityRef vehicleEntity, float delta,SegmentMapping mapping) {
+    public Vector3f vehicleNormal(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
-        if(delta == 0 || mapping == null){
+        if (delta == 0 || mapping == null) {
             Segment segment = segmentCacheSystem.getSegment(vehicle.segmentMeta.prefab);
             int index = segment.index(vehicle.segmentMeta.position);
             Quat4f rotation = segmentSystem.segmentRotation(vehicle.segmentMeta);
             return segment.normal(index, segment.getSegmentPosition(index, vehicle.segmentMeta.position), rotation);
         }
         SegmentMeta meta = new SegmentMeta(vehicle.segmentMeta);
-        if(this.segmentSystem.updateSegmentMeta(meta,delta,mapping))
-        {
+        if (this.segmentSystem.updateSegmentMeta(meta, delta, mapping)) {
             Segment segment = segmentCacheSystem.getSegment(meta.prefab);
             int index = segment.index(meta.position);
             Quat4f rotation = segmentSystem.segmentRotation(meta);
@@ -157,14 +153,11 @@ public class PathFollowerSystem extends BaseComponentSystem {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
         EntityRef previous = vehicle.segmentMeta.association;
 
-        boolean result = segmentSystem.updateSegmentMeta(vehicle.segmentMeta,deltaT,mapping);
+        boolean result = segmentSystem.updateSegmentMeta(vehicle.segmentMeta, deltaT, mapping);
         if (previous != vehicle.segmentMeta.association) {
             vehicleEntity.send(new OnExitSegment(previous));
             vehicleEntity.send(new OnVisitSegment(vehicle.segmentMeta.association));
         }
         return result;
     }
-
-
-
 }

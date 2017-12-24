@@ -15,20 +15,25 @@
  */
 package org.terasology.segmentedpaths;
 
+import com.google.common.collect.Lists;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.segmentedpaths.components.PathComponent;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by michaelpollind on 4/2/17.
  */
 public class Segment {
 
-    public static final float ARC_SEGMENT_ITERATIONS = 100;
+    public static final int ARC_SEGMENT_ITERATIONS = 100;
 
     private PathComponent.CubicBezier[] curves;
     private float[] argLengths;
+    private float[][] arcSamples;
 
     private Vector3f startingBinormal;
     private Vector3f startingNormal;
@@ -50,6 +55,8 @@ public class Segment {
         if (this.curves.length == 0)
             return;
 
+        arcSamples = new float[this.curves.length][ARC_SEGMENT_ITERATIONS+1];
+
         float distance = 0f;
 
         Vector3f previous = point(0, 0);// curves[0].getPoint(0);
@@ -60,9 +67,11 @@ public class Segment {
         for (int x = 0; x < curves.length; x++) {
 
             for (int y = 0; y <= ARC_SEGMENT_ITERATIONS; y++) {
-                Vector3f current = point(x, y / ARC_SEGMENT_ITERATIONS);
+                Vector3f current = point(x, y / (float)ARC_SEGMENT_ITERATIONS);
                 distance += current.distance(previous);
+                arcSamples[x][y] = distance;
                 previous = current;
+
             }
             this.argLengths[x] = distance;
         }
@@ -85,10 +94,20 @@ public class Segment {
 
 
     public float getSegmentPosition(int index, float segmentPosition) {
+        for(int x = 0; x < arcSamples[index].length; x++)
+        {
+            if(segmentPosition < arcSamples[index][x])
+            {
+                if (index - 1 < 0) {
+                    return (arcSamples[index][x] / argLengths[0]);
+                }
+                return ((arcSamples[index][x] - argLengths[index - 1]) / (argLengths[index - 1] - arcSamples[index][x]));
+            }
+        }
         if (index - 1 < 0) {
             return (segmentPosition / argLengths[0]);
         }
-        return ((segmentPosition - argLengths[index - 1]) / (argLengths[index - 1] - argLengths[index]));
+        return ((segmentPosition - argLengths[index - 1]) / (argLengths[index - 1] - segmentPosition));
     }
 
     public float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quat4f segmentRotation) {

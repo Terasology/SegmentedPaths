@@ -16,7 +16,6 @@
 package org.terasology.segmentedpaths.controllers;
 
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -68,37 +67,29 @@ public class SegmentSystem extends BaseComponentSystem {
         return JointMatch.None;
     }
 
-    public boolean updateSegmentMeta(float position, EntityRef association, Prefab prefab, float delta, SegmentMapping mapping) {
-        return updateSegmentMeta(new SegmentMeta(position, association, prefab), delta, mapping);
-    }
 
     public boolean updateSegmentMeta(SegmentMeta segmentMeta, float delta, SegmentMapping mapping) {
 
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
 
-        if (delta + segmentMeta.position > 0 &&  delta + segmentMeta.position < segment.maxDistance()) {
-            segmentMeta.position = delta + segmentMeta.position;
-            return true;
-        } else {
-            delta -= segmentMeta.position * Math.signum(delta);
-        }
-
         while (true) {
-            Vector3f p1 = this.segmentPosition(segmentMeta);
-            Quat4f q1 = this.segmentRotation(segmentMeta);
-
-            if (delta + segmentMeta.position > 0 &&  delta + segmentMeta.position < segment.maxDistance()) {
+            if (delta + segmentMeta.position > 0 && delta + segmentMeta.position < segment.maxDistance()) {
                 segmentMeta.position = delta + segmentMeta.position;
                 return true;
             }
-
             SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
-            delta -= segment.maxDistance() * Math.signum(delta);
+            if (delta < 0) {
+                delta -= segmentMeta.position * Math.signum(delta);
+            } else {
+                delta -= (segment.maxDistance() - segmentMeta.position) * Math.signum(delta);
+            }
+
             if (mappingResult == null)
                 return false;
-
             Segment nextSegment = segmentCacheSystem.getSegment(mappingResult.prefab);
 
+            Vector3f p1 = this.segmentPosition(segmentMeta);
+            Quat4f q1 = this.segmentRotation(segmentMeta);
             Vector3f p2 = this.segmentPosition(mappingResult.entity);
             Quat4f q2 = this.segmentRotation(mappingResult.entity);
 
@@ -121,9 +112,9 @@ public class SegmentSystem extends BaseComponentSystem {
                 default:
                     return false;
             }
-            segment = nextSegment;
             segmentMeta.prefab = mappingResult.prefab;
             segmentMeta.association = mappingResult.entity;
+            segment = nextSegment;
         }
     }
 
