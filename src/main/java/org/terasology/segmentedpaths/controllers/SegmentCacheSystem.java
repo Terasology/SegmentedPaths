@@ -19,9 +19,12 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.segmentedpaths.Segment;
-import org.terasology.segmentedpaths.components.PathComponent;
+import org.terasology.segmentedpaths.components.LinearPathComponent;
+import org.terasology.segmentedpaths.segments.CurvedSegment;
+import org.terasology.segmentedpaths.components.CurvedPathComponent;
 import org.terasology.registry.Share;
+import org.terasology.segmentedpaths.segments.LinearSegment;
+import org.terasology.segmentedpaths.segments.Segment;
 
 import java.util.HashMap;
 
@@ -39,14 +42,28 @@ public class SegmentCacheSystem extends BaseComponentSystem {
         if (segment != null)
             return segment;
 
-        PathComponent pathComponent = prefab.getComponent(PathComponent.class);
-        if (pathComponent == null)
-            return null;
+        if(prefab.hasComponent(CurvedPathComponent.class))
+        {
+            CurvedPathComponent pathComponent = prefab.getComponent(CurvedPathComponent.class);
+            if (pathComponent == null)
+                return null;
 
-        PathComponent.CubicBezier[] c = new PathComponent.CubicBezier[pathComponent.path.size()];
-        pathComponent.path.toArray(c);
-        segment = new Segment(c, pathComponent.startingBinormal);
-        segments.put(prefab.getName(), segment);
+            CurvedPathComponent.CubicBezier[] c = new CurvedPathComponent.CubicBezier[pathComponent.path.size()];
+            pathComponent.path.toArray(c);
+            segment = new CurvedSegment(c, pathComponent.startingBinormal);
+            segments.put(prefab.getName(), segment);
+        }
+        else if(prefab.hasComponent(LinearPathComponent.class))
+        {
+            LinearPathComponent pathComponent = prefab.getComponent(LinearPathComponent.class);
+            if (pathComponent == null)
+                return null;
+            LinearPathComponent.Linear[] c = new LinearPathComponent.Linear[pathComponent.path.size()];
+            pathComponent.path.toArray(c);
+            segment = new LinearSegment(c);
+            segments.put(prefab.getName(), segment);
+
+        }
 
         return segment;
     }

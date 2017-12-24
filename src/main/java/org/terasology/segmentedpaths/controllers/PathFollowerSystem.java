@@ -19,20 +19,16 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.Rotation;
 import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.segmentedpaths.Segment;
+import org.terasology.segmentedpaths.segments.CurvedSegment;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.segmentedpaths.SegmentMeta;
-import org.terasology.segmentedpaths.blocks.PathFamily;
 import org.terasology.segmentedpaths.components.PathFollowerComponent;
 import org.terasology.segmentedpaths.events.OnExitSegment;
 import org.terasology.segmentedpaths.events.OnVisitSegment;
-import org.terasology.world.block.BlockComponent;
-import org.terasology.world.block.family.BlockFamily;
+import org.terasology.segmentedpaths.segments.Segment;
 
 /**
  * Created by michaelpollind on 4/1/17.
