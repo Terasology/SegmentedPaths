@@ -20,13 +20,13 @@ import org.terasology.entitySystem.event.Event;
 
 public class OnExitSegment implements Event {
 
-    private EntityRef segmentEntity;
+    private EntityRef pathFollowingEntity;
 
-    public OnExitSegment(EntityRef segmentEntity){
-        this.segmentEntity = segmentEntity;
+    public OnExitSegment(EntityRef pathFollowingEntity){
+        this.pathFollowingEntity = pathFollowingEntity;
     }
 
-    public EntityRef getSegmentEntity() {
-        return segmentEntity;
+    public EntityRef getPathFollowingEntity() {
+        return pathFollowingEntity;
     }
 }

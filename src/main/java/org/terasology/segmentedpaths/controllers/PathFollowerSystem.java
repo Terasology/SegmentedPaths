@@ -133,8 +133,8 @@ public class PathFollowerSystem extends BaseComponentSystem {
         vehicle.heading = this.vehicleTangent(vehicleEntity).mul(vehicle.segmentMeta.sign);
         boolean result = segmentSystem.updateSegmentMeta(vehicle.segmentMeta, vehicle.segmentMeta.sign * delta, mapping);
         if (previous != vehicle.segmentMeta.association) {
-            vehicleEntity.send(new OnExitSegment(previous));
-            vehicleEntity.send(new OnVisitSegment(vehicle.segmentMeta.association));
+            previous.send(new OnExitSegment(vehicleEntity));
+            vehicle.segmentMeta.association.send(new OnVisitSegment(vehicleEntity));
         }
         return result;
     }
