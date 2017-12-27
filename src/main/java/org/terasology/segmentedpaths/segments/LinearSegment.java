@@ -27,7 +27,7 @@ public class LinearSegment implements Segment {
     private LinearPathComponent.Linear[] linearPoints;
 
     public LinearSegment(LinearPathComponent.Linear[] points) {
-        if(points.length < 2)
+        if (points.length < 2)
             return;
         this.linearPoints = points;
         CalculateLength();
@@ -37,14 +37,14 @@ public class LinearSegment implements Segment {
 
         this.tangents = new Vector3f[linearPoints.length - 1];
         this.arcLengths = new float[linearPoints.length - 1];
-        this.arc =new Vector3f[linearPoints.length - 1];
+        this.arc = new Vector3f[linearPoints.length - 1];
         LinearPathComponent.Linear previous = linearPoints[0];
         float distance = 0;
         for (int x = 1; x < linearPoints.length; x++) {
             distance += previous.point.distance(linearPoints[x].point);
             arcLengths[x - 1] = distance;
             tangents[x - 1] = new Vector3f(linearPoints[x].point).sub(previous.point).normalize();
-            arc[x-1] =new Vector3f(linearPoints[x].point).sub(previous.point);
+            arc[x - 1] = new Vector3f(linearPoints[x].point).sub(previous.point);
             previous = linearPoints[x];
         }
     }
@@ -63,7 +63,7 @@ public class LinearSegment implements Segment {
 
     @Override
     public int maxIndex() {
-        return arcLengths.length -1;
+        return arcLengths.length - 1;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class LinearSegment implements Segment {
         if (index - 1 < 0) {
             return (segmentPosition / arcLengths[0]);
         }
-        return ((segmentPosition - arcLengths[index - 1]) / (arcLengths[index - 1] - segmentPosition));
+        return ((segmentPosition - arcLengths[index - 1]) / (arcLengths[index] - arcLengths[index - 1]));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class LinearSegment implements Segment {
         Vector3f previous = point(0, 0, segmentPosition, segmentRotation);
         for (int x = 0; x < arcLengths.length; x++) {
             for (int y = 0; y <= 100; y++) {
-                Vector3f current = point(x, y / (float)100, segmentPosition, segmentRotation);
+                Vector3f current = point(x, y / (float) 100, segmentPosition, segmentRotation);
                 tvalue += current.distance(previous);
                 previous = current;
 
@@ -128,13 +128,13 @@ public class LinearSegment implements Segment {
 
     @Override
     public Vector3f normal(int index, float t) {
-        Vector3f b1 =  linearPoints[index].binormal;
-        Vector3f b2 =  linearPoints[index + 1].binormal;
+        Vector3f b1 = linearPoints[index].binormal;
+        Vector3f b2 = linearPoints[index + 1].binormal;
 
         Vector3f n1 = new Vector3f().cross(tangents[index], b1);
         Vector3f n2 = new Vector3f().cross(tangents[index], b2);
 
-        return Vector3f.lerp(n1,n2,t);
+        return Vector3f.lerp(n1, n2, t);
     }
 
     @Override

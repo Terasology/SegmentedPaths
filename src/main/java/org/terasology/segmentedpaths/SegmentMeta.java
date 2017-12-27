@@ -28,6 +28,8 @@ public class SegmentMeta {
     public EntityRef association;
     @Replicate
     public Prefab prefab;
+    @Replicate
+    public int sign = 1;
 
     public SegmentMeta(){
 
