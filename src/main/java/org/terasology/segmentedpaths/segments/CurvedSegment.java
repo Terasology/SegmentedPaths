@@ -28,7 +28,7 @@ public class CurvedSegment implements Segment{
     public static final int ARC_SEGMENT_ITERATIONS = 100;
 
     private CurvedPathComponent.CubicBezier[] curves;
-    private float[] argLengths;
+    private float[] arcLengths;
     private float[][] arcSamples;
 
     private Vector3f startingBinormal;
@@ -37,7 +37,7 @@ public class CurvedSegment implements Segment{
     public CurvedSegment(CurvedPathComponent.CubicBezier[] curves, Vector3f startingBinormal) {
         this.curves = curves;
         this.startingBinormal = startingBinormal;
-        this.argLengths = new float[this.curves.length];
+        this.arcLengths = new float[this.curves.length];
         Vector3f normal = new Vector3f();
         normal.cross(tangent(0, 0), startingBinormal);
         this.startingNormal = normal;
@@ -68,7 +68,7 @@ public class CurvedSegment implements Segment{
                 previous = current;
 
             }
-            this.argLengths[x] = distance;
+            this.arcLengths[x] = distance;
         }
     }
 
@@ -76,17 +76,17 @@ public class CurvedSegment implements Segment{
     public int index(float segmentPosition) {
         if (segmentPosition < 0)
             return 0;
-        for (int x = 0; x < argLengths.length; x++) {
-            if (segmentPosition < argLengths[x]) {
+        for (int x = 0; x < arcLengths.length; x++) {
+            if (segmentPosition < arcLengths[x]) {
                 return x;
             }
         }
-        return argLengths.length - 1;
+        return arcLengths.length - 1;
     }
 
     @Override
     public int maxIndex() {
-        return argLengths.length - 1;
+        return arcLengths.length - 1;
     }
 
     @Override
@@ -96,15 +96,15 @@ public class CurvedSegment implements Segment{
             if(segmentPosition < arcSamples[index][x])
             {
                 if (index - 1 < 0) {
-                    return (arcSamples[index][x] / argLengths[0]);
+                    return (arcSamples[index][x] / arcLengths[0]);
                 }
-                return ((arcSamples[index][x] - argLengths[index - 1]) / (argLengths[index - 1] - arcSamples[index][x]));
+                return ((arcSamples[index][x] - arcLengths[index - 1]) / (arcLengths[index] - arcLengths[index - 1]));
             }
         }
         if (index - 1 < 0) {
-            return (segmentPosition / argLengths[0]);
+            return (segmentPosition / arcLengths[0]);
         }
-        return ((segmentPosition - argLengths[index - 1]) / (argLengths[index - 1] - segmentPosition));
+        return ((segmentPosition - arcLengths[index - 1]) / (arcLengths[index] - arcLengths[index - 1]));
     }
 
     @Override
@@ -135,7 +135,7 @@ public class CurvedSegment implements Segment{
 
     @Override
     public float maxDistance() {
-        return argLengths[argLengths.length - 1];
+        return arcLengths[arcLengths.length - 1];
     }
 
     @Override

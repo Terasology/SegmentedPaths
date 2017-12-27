@@ -102,9 +102,11 @@ public class SegmentSystem extends BaseComponentSystem {
                 case Start_Start:
                     segmentMeta.position = 0;
                     delta *= -1;
+                    segmentMeta.sign *= -1;
                     break;
                 case End_End:
                     delta *= -1;
+                    segmentMeta.sign *= -1;
                     segmentMeta.position = nextSegment.maxDistance();
                     break;
                 case End_Start:

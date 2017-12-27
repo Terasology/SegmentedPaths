@@ -15,6 +15,8 @@
  */
 package org.terasology.segmentedpaths;
 
+import org.lwjgl.util.vector.Vector;
+import org.lwjgl.util.vector.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.network.Replicate;
@@ -28,6 +30,9 @@ public class SegmentMeta {
     public EntityRef association;
     @Replicate
     public Prefab prefab;
+
+    @Replicate
+    public int sign = 1;
 
     public SegmentMeta(){
 
