@@ -15,8 +15,6 @@
  */
 package org.terasology.segmentedpaths;
 
-import org.lwjgl.util.vector.Vector;
-import org.lwjgl.util.vector.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.network.Replicate;

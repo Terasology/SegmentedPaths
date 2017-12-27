@@ -42,24 +42,6 @@ public class PathFollowerSystem extends BaseComponentSystem {
     @In
     SegmentCacheSystem segmentCacheSystem;
 
-//    public float findDeltaT(EntityRef vehicleEntity, Vector3f vector) {
-//        PathFollowerComponent segmentVehicleComponent = vehicleEntity.getComponent(PathFollowerComponent.class);
-//        return segmentVehicleComponent.heading.dot(vector);
-//    }
-//
-//    private float calculateDeltaT(EntityRef vehicleEntity, float deltaT, boolean updateHeading) {
-//        PathFollowerComponent segmentVehicleComponent = vehicleEntity.getComponent(PathFollowerComponent.class);
-//        Vector3f tangent = vehicleTangent(vehicleEntity);
-//        if (tangent.dot(segmentVehicleComponent.heading) < 0) {
-//            deltaT *= -1;
-//            tangent.invert();
-//        }
-//        if (updateHeading)
-//            segmentVehicleComponent.heading = tangent;
-//        vehicleEntity.saveComponent(segmentVehicleComponent);
-//        return deltaT;
-//    }
-
     public Vector3f vehicleTangent(EntityRef vehicleEntity) {
         return vehicleTangent(vehicleEntity, 0, null);
     }
@@ -148,7 +130,6 @@ public class PathFollowerSystem extends BaseComponentSystem {
             return true;
 
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
-//        float deltaT = vehicle.segmentMeta.sign * tDelta;//calculateDeltaT(vehicleEntity, tDelta, true);
         EntityRef previous = vehicle.segmentMeta.association;
 
         vehicle.heading = this.vehicleTangent(vehicleEntity).mul(vehicle.segmentMeta.sign);
