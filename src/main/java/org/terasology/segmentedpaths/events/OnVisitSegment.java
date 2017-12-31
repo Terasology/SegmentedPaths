@@ -18,13 +18,27 @@ package org.terasology.segmentedpaths.events;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
+/**
+ * Event called when an entity which has {@link org.terasology.segmentedpaths.components.PathFollowerComponent} enters a segment.
+ */
 public class OnVisitSegment implements Event {
+
+    /**
+     * EntityRef to an entity, which started to follow a path.
+     */
     private EntityRef pathFollowingEntity;
 
+    /**
+     * Event constructor.
+     * @param pathFollowingEntity which entered a segment.
+     */
     public OnVisitSegment(EntityRef pathFollowingEntity){
         this.pathFollowingEntity = pathFollowingEntity;
     }
 
+    /**
+     * @return the entity, which started to follow a path.
+     */
     public EntityRef getPathFollowingEntity() {
         return pathFollowingEntity;
     }
