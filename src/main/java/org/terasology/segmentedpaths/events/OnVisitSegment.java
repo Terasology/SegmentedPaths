@@ -24,20 +24,20 @@ import org.terasology.entitySystem.event.Event;
 public class OnVisitSegment implements Event {
 
     /**
-     * EntityRef to an entity, which started to follow a path.
+     * EntityRef to an entity, which enters a segment.
      */
     private EntityRef pathFollowingEntity;
 
     /**
      * Event constructor.
-     * @param pathFollowingEntity which entered a segment.
+     * @param pathFollowingEntity which enters a segment.
      */
     public OnVisitSegment(EntityRef pathFollowingEntity){
         this.pathFollowingEntity = pathFollowingEntity;
     }
 
     /**
-     * @return the entity, which started to follow a path.
+     * @return the entity, which enters a segment.
      */
     public EntityRef getPathFollowingEntity() {
         return pathFollowingEntity;
