@@ -29,13 +29,21 @@ import org.terasology.segmentedpaths.segments.Segment;
 import java.util.HashMap;
 
 /**
- * Created by michaelpollind on 4/3/17.
+ * Cache system for segments. Constructs, stores and supplies segments based off their prefabs.
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(value = SegmentCacheSystem.class)
 public class SegmentCacheSystem extends BaseComponentSystem {
+
+    //A map that stores already constructed segments with their prefab's name as the key.
     private HashMap<String, Segment> segments = new HashMap<>();
 
+    /**
+     * Gets a segment based off the given prefab.
+     * If the specified segment has already been constructed, returns it from the cache, otherwise constructs it from the prefab.
+     * @param prefab A prefab that describes the segment.
+     * @return A segment based on the given prefab, or null if the given prefab is missing a path-describing component.
+     */
     public Segment getSegment(Prefab prefab) {
 
         Segment segment = segments.get(prefab.getName());
