@@ -19,25 +19,23 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
 /**
- * Event called when an entity which has {@link org.terasology.segmentedpaths.components.PathFollowerComponent} leaves a segment.
+ * Event called when an entity that has {@link org.terasology.segmentedpaths.components.PathFollowerComponent} leaves a segment.
  */
 public class OnExitSegment implements Event {
 
-    /**
-     * EntityRef to an entity, which leaves a segment.
-     */
     private EntityRef pathFollowingEntity;
 
     /**
      * Event constructor.
-     * @param pathFollowingEntity which leaves a segment.
+     * @param pathFollowingEntity The entity that left the segment.
      */
     public OnExitSegment(EntityRef pathFollowingEntity){
         this.pathFollowingEntity = pathFollowingEntity;
     }
 
     /**
-     * @return the entity, which leaves a segment.
+     * Returns the entity that left the segment.
+     * @return The entity that left the segment.
      */
     public EntityRef getPathFollowingEntity() {
         return pathFollowingEntity;
