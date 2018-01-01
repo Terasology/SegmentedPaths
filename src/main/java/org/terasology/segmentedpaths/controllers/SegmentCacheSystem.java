@@ -35,14 +35,14 @@ import java.util.HashMap;
 @Share(value = SegmentCacheSystem.class)
 public class SegmentCacheSystem extends BaseComponentSystem {
 
-    //A map that stores already constructed segments with their prefab's name as a key.
+    //A map that stores already constructed segments with their prefab's name as the key.
     private HashMap<String, Segment> segments = new HashMap<>();
 
     /**
      * Gets a segment based off the given prefab.
      * If the specified segment has already been constructed, returns it from the cache, otherwise constructs it from the prefab.
      * @param prefab A prefab that describes the segment.
-     * @return A segment based on the given prefab - either from the cache, or a freshly constructed one, null if the given prefab is missing a path-describing component.
+     * @return A segment based on the given prefab, or null if the given prefab is missing a path-describing component.
      */
     public Segment getSegment(Prefab prefab) {
 
