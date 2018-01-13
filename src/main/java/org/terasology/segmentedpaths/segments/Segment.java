@@ -16,7 +16,7 @@
 package org.terasology.segmentedpaths.segments;
 
 import org.terasology.math.geom.Quat4f;
-import org.terasology.math.geom.Vector3f
+import org.terasology.math.geom.Vector3f;
 
 /**
  * Represents a segment traversable by an entity that has the {@link PathFollowerComponent}. Contiguous segments are put together to
