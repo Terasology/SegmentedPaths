@@ -57,7 +57,7 @@ public interface Segment {
      * @return The segment position of the closest point.
      */
     float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quat4f segmentRotation);
-    
+
     /**
      * Returns the length of this segment.
      *
