@@ -58,11 +58,11 @@ public class SegmentSystem extends BaseComponentSystem {
      * Returns by which type of connection from {@link JointMatch} are two segments connected.
      *
      * @param current Segment to be used as the base for comparing
-     * @param p1      Where is the {@code current} segment to be placed
-     * @param r1      How is the {@code current} segment to be rotated
-     * @param next    The other segment used in comparing
-     * @param p2      Where is the {@code next} segment to be placed
-     * @param r2      How is the {@code next} segment to be rotated
+     * @param p1 Where is the {@code current} segment to be placed
+     * @param r1 How is the {@code current} segment to be rotated
+     * @param next The other segment used in comparing
+     * @param p2 Where is the {@code next} segment to be placed
+     * @param r2 How is the {@code next} segment to be rotated
      * @return Type of match
      */
     public JointMatch segmentMatch(Segment current, Vector3f p1, Quat4f r1, Segment next, Vector3f p2, Quat4f r2) {
@@ -87,8 +87,8 @@ public class SegmentSystem extends BaseComponentSystem {
      * Updates {@link SegmentMeta} to contain the correct data based on distance delta.
      *
      * @param segmentMeta SegmentMeta to update
-     * @param delta       Distance by which to update
-     * @param mapping     A mapping to be used for figuring out chaining of segments
+     * @param delta Distance by which to update
+     * @param mapping A mapping to be used for figuring out chaining of segments
      * @return Returns false if end of path has been reached, true otherwise
      */
     public boolean updateSegmentMeta(SegmentMeta segmentMeta, float delta, SegmentMapping mapping) {

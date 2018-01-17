@@ -56,8 +56,8 @@ public class PathFollowerSystem extends BaseComponentSystem {
      * Returns a tangent to the path at the point the vehicle will be after delta distance.
      *
      * @param vehicleEntity Vehicle entity to which we want a tangent
-     * @param delta         Distance to move the point by
-     * @param mapping       A mapping to be used for figuring out chaining of segments
+     * @param delta Distance to move the point by
+     * @param mapping A mapping to be used for figuring out chaining of segments
      * @return Vector representation of the tangent
      */
     public Vector3f vehicleTangent(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
@@ -92,8 +92,8 @@ public class PathFollowerSystem extends BaseComponentSystem {
      * Returns point representing vehicle position on path the vehicle will be after delta distance.
      *
      * @param vehicleEntity Vehicle whose position we are measuring
-     * @param delta         Distance to move the point by
-     * @param mapping       A mapping to be used for figuring out chaining of segments
+     * @param delta Distance to move the point by
+     * @param mapping A mapping to be used for figuring out chaining of segments
      * @return Vector representation of the point
      */
     public Vector3f vehiclePoint(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
@@ -130,8 +130,8 @@ public class PathFollowerSystem extends BaseComponentSystem {
      * Returns a normal to the path at the point the vehicle will be at after delta distance.
      *
      * @param vehicleEntity Vehicle entity to which we want a normal
-     * @param delta         Distance to move the point by
-     * @param mapping       A mapping to be used for figuring out chaining of segments
+     * @param delta Distance to move the point by
+     * @param mapping A mapping to be used for figuring out chaining of segments
      * @return Vector representation of the normal
      */
     public Vector3f vehicleNormal(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
@@ -154,6 +154,7 @@ public class PathFollowerSystem extends BaseComponentSystem {
 
     /**
      * Returns whether the vehicle is valid for working with.
+     *
      * @param vehicleEntity Vehicle that we want to check
      * @return True if vehicle is valid, false otherwise
      */
@@ -172,6 +173,7 @@ public class PathFollowerSystem extends BaseComponentSystem {
 
     /**
      * Moves the vehicle for delta distance along the path
+     *
      * @param vehicleEntity Vehicle to be moved
      * @param delta Distance the vehicle is to be moved by
      * @param mapping Mapping to be used for figuring out segment chaining
