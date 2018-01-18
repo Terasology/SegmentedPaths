@@ -74,6 +74,9 @@ public class SegmentSystem extends BaseComponentSystem {
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
 
         while (true) {
+            if(Math.abs(delta) < Float.MIN_VALUE)
+                return true;
+
             if (delta + segmentMeta.position > 0 && delta + segmentMeta.position < segment.maxDistance()) {
                 segmentMeta.position = delta + segmentMeta.position;
                 return true;
