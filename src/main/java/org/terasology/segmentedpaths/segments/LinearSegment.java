@@ -20,6 +20,9 @@ import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.segmentedpaths.components.LinearPathComponent;
 
+/**
+ * An implementation of {@code Segment} representing segment composed of straight subsegments.
+ */
 public class LinearSegment implements Segment {
     private float[] arcLengths;
     private Vector3f[] tangents;
@@ -33,6 +36,9 @@ public class LinearSegment implements Segment {
         CalculateLength();
     }
 
+    /**
+     * Calculates lengths and tagets for all the subsegments in this segment.
+     */
     public void CalculateLength() {
 
         this.tangents = new Vector3f[linearPoints.length - 1];

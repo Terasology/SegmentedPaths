@@ -35,6 +35,9 @@ import org.terasology.world.block.family.BlockFamily;
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(value = SegmentSystem.class)
 public class SegmentSystem extends BaseComponentSystem {
+    /**
+     * Enum representing possible combinations of ends segments may be connected by.
+     */
     public enum JointMatch {
         Start_End,
         Start_Start,
@@ -43,13 +46,25 @@ public class SegmentSystem extends BaseComponentSystem {
         None
     }
 
-
+    /**
+     * The maximum deviation of two points to be from each other for them to be considered matching.
+     */
     public static final float MATCH_EPSILON = .09f * .09f;
 
     @In
     private SegmentCacheSystem segmentCacheSystem;
 
-
+    /**
+     * Returns by which type of connection from {@link JointMatch} are two segments connected.
+     *
+     * @param current Segment to be used as the base for comparing
+     * @param p1 Where is the {@code current} segment to be placed
+     * @param r1 How is the {@code current} segment to be rotated
+     * @param next The other segment used in comparing
+     * @param p2 Where is the {@code next} segment to be placed
+     * @param r2 How is the {@code next} segment to be rotated
+     * @return Type of match
+     */
     public JointMatch segmentMatch(Segment current, Vector3f p1, Quat4f r1, Segment next, Vector3f p2, Quat4f r2) {
         Vector3f s1 = current.point(0, 0, p1, r1);
         Vector3f e1 = current.point(current.maxIndex(), 1, p1, r1);
@@ -68,7 +83,14 @@ public class SegmentSystem extends BaseComponentSystem {
         return JointMatch.None;
     }
 
-
+    /**
+     * Updates {@link SegmentMeta} to contain the correct data based on distance delta.
+     *
+     * @param segmentMeta SegmentMeta to update
+     * @param delta Distance by which to update
+     * @param mapping A mapping to be used for figuring out chaining of segments
+     * @return Returns false if end of path has been reached, true otherwise
+     */
     public boolean updateSegmentMeta(SegmentMeta segmentMeta, float delta, SegmentMapping mapping) {
 
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
@@ -124,11 +146,22 @@ public class SegmentSystem extends BaseComponentSystem {
         }
     }
 
-
+    /**
+     * Returns a position of segment referenced by given {@code SegmentMeta}.
+     *
+     * @param meta Segment we want to get position of
+     * @return Position of the segment
+     */
     public Vector3f segmentPosition(SegmentMeta meta) {
         return segmentPosition(meta.association);
     }
 
+    /**
+     * Returns a position of segment referenced by given {@code EntityRef}.
+     *
+     * @param entity Segment we want to get position of
+     * @return Position of the segment
+     */
     public Vector3f segmentPosition(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
@@ -140,10 +173,22 @@ public class SegmentSystem extends BaseComponentSystem {
         return Vector3f.zero();
     }
 
+    /**
+     * Returns a rotation of segment referenced by given {@code EntityRef}.
+     *
+     * @param meta Segment we want to get rotation of
+     * @return Rotation of the segment
+     */
     public Quat4f segmentRotation(SegmentMeta meta) {
         return segmentRotation(meta.association);
     }
 
+    /**
+     * Returns a rotation of segment referenced by given {@code EntityRef}.
+     *
+     * @param entity Segment we want to get rotation of
+     * @return Rotation of the segment
+     */
     public Quat4f segmentRotation(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);

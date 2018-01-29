@@ -31,7 +31,7 @@ import org.terasology.segmentedpaths.events.OnVisitSegment;
 import org.terasology.segmentedpaths.segments.Segment;
 
 /**
- * Created by michaelpollind on 4/1/17.
+ * A class for working with entities following a path.
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(value = PathFollowerSystem.class)
@@ -42,10 +42,24 @@ public class PathFollowerSystem extends BaseComponentSystem {
     @In
     SegmentCacheSystem segmentCacheSystem;
 
+    /**
+     * Returns a tangent to the path at the point the vehicle is currently at.
+     *
+     * @param vehicleEntity Vehicle entity marking a point to which we want a tangent
+     * @return Vector representation of the tangent
+     */
     public Vector3f vehicleTangent(EntityRef vehicleEntity) {
         return vehicleTangent(vehicleEntity, 0, null);
     }
 
+    /**
+     * Returns a tangent to the path at the point the vehicle will be after delta distance.
+     *
+     * @param vehicleEntity Vehicle entity to which we want a tangent
+     * @param delta Distance to move the point by
+     * @param mapping A mapping to be used for figuring out chaining of segments
+     * @return Vector representation of the tangent
+     */
     public Vector3f vehicleTangent(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
         if (delta == 0 || mapping == null) {
@@ -64,10 +78,24 @@ public class PathFollowerSystem extends BaseComponentSystem {
         return null;
     }
 
+    /**
+     * Returns point representing current vehicle position on path.
+     *
+     * @param vehicleEntity Vehicle whose position we are measuring
+     * @return Vector representation of the point
+     */
     public Vector3f vehiclePoint(EntityRef vehicleEntity) {
         return vehiclePoint(vehicleEntity, 0, null);
     }
 
+    /**
+     * Returns point representing vehicle position on path the vehicle will be after delta distance.
+     *
+     * @param vehicleEntity Vehicle whose position we are measuring
+     * @param delta Distance to move the point by
+     * @param mapping A mapping to be used for figuring out chaining of segments
+     * @return Vector representation of the point
+     */
     public Vector3f vehiclePoint(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
         if (delta == 0 || mapping == null) {
@@ -88,11 +116,24 @@ public class PathFollowerSystem extends BaseComponentSystem {
         return null;
     }
 
-
+    /**
+     * Returns a normal to the path at the point the vehicle is currently at.
+     *
+     * @param vehicleEntity Vehicle entity to which we want a normal
+     * @return Vector representation of the normal
+     */
     public Vector3f vehicleNormal(EntityRef vehicleEntity) {
         return this.vehicleNormal(vehicleEntity, 0, null);
     }
 
+    /**
+     * Returns a normal to the path at the point the vehicle will be at after delta distance.
+     *
+     * @param vehicleEntity Vehicle entity to which we want a normal
+     * @param delta Distance to move the point by
+     * @param mapping A mapping to be used for figuring out chaining of segments
+     * @return Vector representation of the normal
+     */
     public Vector3f vehicleNormal(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
         if (delta == 0 || mapping == null) {
@@ -111,7 +152,12 @@ public class PathFollowerSystem extends BaseComponentSystem {
         return null;
     }
 
-
+    /**
+     * Returns whether the vehicle is valid for working with.
+     *
+     * @param vehicleEntity Vehicle that we want to check
+     * @return True if vehicle is valid, false otherwise
+     */
     public boolean isVehicleValid(EntityRef vehicleEntity) {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
         if (vehicle == null)
@@ -125,6 +171,14 @@ public class PathFollowerSystem extends BaseComponentSystem {
         return true;
     }
 
+    /**
+     * Moves the vehicle for delta distance along the path
+     *
+     * @param vehicleEntity Vehicle to be moved
+     * @param delta Distance the vehicle is to be moved by
+     * @param mapping Mapping to be used for figuring out segment chaining
+     * @return Returns false if end of path has been reached, true otherwise
+     */
     public boolean move(EntityRef vehicleEntity, float delta, SegmentMapping mapping) {
         if (delta == 0)
             return true;

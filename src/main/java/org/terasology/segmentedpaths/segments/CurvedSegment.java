@@ -21,7 +21,7 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.segmentedpaths.components.CurvedPathComponent;
 
 /**
- * Created by michaelpollind on 4/2/17.
+ * An implementation of {@code Segment} representing segment composed of curves.
  */
 public class CurvedSegment implements Segment{
 
@@ -46,6 +46,9 @@ public class CurvedSegment implements Segment{
 
     }
 
+    /**
+     * Calculates length of all the curves segment is composed of.
+     */
     public void CalculateLength() {
         if (this.curves.length == 0)
             return;

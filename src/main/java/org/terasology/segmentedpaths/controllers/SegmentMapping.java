@@ -20,22 +20,38 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.segmentedpaths.SegmentMeta;
 
 /**
- * Created by michaelpollind on 4/5/17.
+ * Interface for working with segments chained together.
  */
 public interface SegmentMapping {
-    class MappingResult{
-        public  MappingResult(Prefab prefab,EntityRef entity){
+
+    /**
+     * A class packing together the result of the mapping, composing of {@link Prefab} representing given segment and
+     * {@link EntityRef} referencing its instance.
+     */
+    class MappingResult {
+        public MappingResult(Prefab prefab, EntityRef entity) {
             this.prefab = prefab;
             this.entity = entity;
         }
+
         Prefab prefab;
         EntityRef entity;
     }
 
-    enum SegmentEnd{
+    /**
+     * Enum representing the two ends of each segment.
+     */
+    enum SegmentEnd {
         START, END
     }
 
+    /**
+     * Returns segment that's chained to given segment at given end.
+     *
+     * @param meta Segment relative to which we want to get the next segment
+     * @param ends End we want this segment to be chained with the next at
+     * @return The next segment
+     */
     MappingResult nextSegment(SegmentMeta meta, SegmentEnd ends);
 
 }
