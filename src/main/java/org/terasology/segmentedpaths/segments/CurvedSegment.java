@@ -98,16 +98,10 @@ public class CurvedSegment implements Segment{
         {
             if(segmentPosition < arcSamples[index][x])
             {
-                if (index - 1 < 0) {
-                    return (arcSamples[index][x] / arcLengths[0]);
-                }
-                return ((arcSamples[index][x] - arcLengths[index - 1]) / (arcLengths[index] - arcLengths[index - 1]));
+                return x/((float)ARC_SEGMENT_ITERATIONS);
             }
         }
-        if (index - 1 < 0) {
-            return (segmentPosition / arcLengths[0]);
-        }
-        return ((segmentPosition - arcLengths[index - 1]) / (arcLengths[index] - arcLengths[index - 1]));
+        return  1.0f;
     }
 
     @Override
