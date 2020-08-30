@@ -39,33 +39,34 @@ public class SegmentCacheSystem extends BaseComponentSystem {
     private HashMap<String, Segment> segments = new HashMap<>();
 
     /**
-     * Gets a segment based off the given prefab.
-     * If the specified segment has already been constructed, returns it from the cache, otherwise constructs it from the prefab.
+     * Gets a segment based off the given prefab. If the specified segment has already been constructed, returns it from
+     * the cache, otherwise constructs it from the prefab.
+     *
      * @param prefab A prefab that describes the segment.
      * @return A segment based on the given prefab, or null if the given prefab is missing a path-describing component.
      */
     public Segment getSegment(Prefab prefab) {
 
         Segment segment = segments.get(prefab.getName());
-        if (segment != null)
+        if (segment != null) {
             return segment;
+        }
 
-        if(prefab.hasComponent(CurvedPathComponent.class))
-        {
+        if (prefab.hasComponent(CurvedPathComponent.class)) {
             CurvedPathComponent pathComponent = prefab.getComponent(CurvedPathComponent.class);
-            if (pathComponent == null)
+            if (pathComponent == null) {
                 return null;
+            }
 
             CurvedPathComponent.CubicBezier[] c = new CurvedPathComponent.CubicBezier[pathComponent.path.size()];
             pathComponent.path.toArray(c);
             segment = new CurvedSegment(c, pathComponent.startingBinormal);
             segments.put(prefab.getName(), segment);
-        }
-        else if(prefab.hasComponent(LinearPathComponent.class))
-        {
+        } else if (prefab.hasComponent(LinearPathComponent.class)) {
             LinearPathComponent pathComponent = prefab.getComponent(LinearPathComponent.class);
-            if (pathComponent == null)
+            if (pathComponent == null) {
                 return null;
+            }
             LinearPathComponent.Linear[] c = new LinearPathComponent.Linear[pathComponent.path.size()];
             pathComponent.path.toArray(c);
             segment = new LinearSegment(c);

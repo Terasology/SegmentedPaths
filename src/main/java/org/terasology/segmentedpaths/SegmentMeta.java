@@ -31,17 +31,18 @@ public class SegmentMeta {
     @Replicate
     public int sign = 1;
 
-    public SegmentMeta(){
+    public SegmentMeta() {
 
     }
-    public SegmentMeta(SegmentMeta meta){
+
+    public SegmentMeta(SegmentMeta meta) {
         this.position = meta.position;
         this.association = meta.association;
         this.prefab = meta.prefab;
     }
 
-    public SegmentMeta(float position, EntityRef association, Prefab prefab){
-        this.prefab= prefab;
+    public SegmentMeta(float position, EntityRef association, Prefab prefab) {
+        this.prefab = prefab;
         this.association = association;
         this.position = position;
     }

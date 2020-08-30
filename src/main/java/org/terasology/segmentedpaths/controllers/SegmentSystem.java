@@ -15,17 +15,17 @@
  */
 package org.terasology.segmentedpaths.controllers;
 
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Rotation;
-import org.terasology.math.geom.Quat4f;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.segmentedpaths.segments.CurvedSegment;
 import org.terasology.segmentedpaths.SegmentMeta;
 import org.terasology.segmentedpaths.blocks.PathFamily;
 import org.terasology.segmentedpaths.segments.Segment;
@@ -65,21 +65,26 @@ public class SegmentSystem extends BaseComponentSystem {
      * @param r2 How is the {@code next} segment to be rotated
      * @return Type of match
      */
-    public JointMatch segmentMatch(Segment current, Vector3f p1, Quat4f r1, Segment next, Vector3f p2, Quat4f r2) {
+    public JointMatch segmentMatch(Segment current, Vector3f p1, Quaternionf r1, Segment next, Vector3f p2,
+                                   Quaternionf r2) {
         Vector3f s1 = current.point(0, 0, p1, r1);
         Vector3f e1 = current.point(current.maxIndex(), 1, p1, r1);
 
         Vector3f s2 = next.point(0, 0, p2, r2);
         Vector3f e2 = next.point(next.maxIndex(), 1, p2, r2);
 
-        if (s1.distanceSquared(s2) < MATCH_EPSILON)
+        if (s1.distanceSquared(s2) < MATCH_EPSILON) {
             return JointMatch.Start_Start;
-        if (s1.distanceSquared(e2) < MATCH_EPSILON)
+        }
+        if (s1.distanceSquared(e2) < MATCH_EPSILON) {
             return JointMatch.Start_End;
-        if (e1.distanceSquared(s2) < MATCH_EPSILON)
+        }
+        if (e1.distanceSquared(s2) < MATCH_EPSILON) {
             return JointMatch.End_Start;
-        if (e1.distanceSquared(e2) < MATCH_EPSILON)
+        }
+        if (e1.distanceSquared(e2) < MATCH_EPSILON) {
             return JointMatch.End_End;
+        }
         return JointMatch.None;
     }
 
@@ -94,30 +99,33 @@ public class SegmentSystem extends BaseComponentSystem {
     public boolean updateSegmentMeta(SegmentMeta segmentMeta, float delta, SegmentMapping mapping) {
 
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
-
+        float d = delta;
         while (true) {
-            if(Math.abs(delta) < Float.MIN_VALUE)
-                return true;
-
-            if (delta + segmentMeta.position > 0 && delta + segmentMeta.position < segment.maxDistance()) {
-                segmentMeta.position = delta + segmentMeta.position;
+            if (Math.abs(d) < Float.MIN_VALUE) {
                 return true;
             }
-            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
-            if (delta < 0) {
-                delta -= segmentMeta.position * Math.signum(delta);
+
+            if (d + segmentMeta.position > 0 && d + segmentMeta.position < segment.maxDistance()) {
+                segmentMeta.position = d + segmentMeta.position;
+                return true;
+            }
+            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, d < 0 ?
+                SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
+            if (d < 0) {
+                d -= segmentMeta.position * Math.signum(d);
             } else {
-                delta -= (segment.maxDistance() - segmentMeta.position) * Math.signum(delta);
+                d -= (segment.maxDistance() - segmentMeta.position) * Math.signum(d);
             }
 
-            if (mappingResult == null)
+            if (mappingResult == null) {
                 return false;
+            }
             Segment nextSegment = segmentCacheSystem.getSegment(mappingResult.prefab);
 
             Vector3f p1 = this.segmentPosition(segmentMeta);
-            Quat4f q1 = this.segmentRotation(segmentMeta);
+            Quaternionf q1 = this.segmentRotation(segmentMeta);
             Vector3f p2 = this.segmentPosition(mappingResult.entity);
-            Quat4f q2 = this.segmentRotation(mappingResult.entity);
+            Quaternionf q2 = this.segmentRotation(mappingResult.entity);
 
             JointMatch match = this.segmentMatch(segment, p1, q1, nextSegment, p2, q2);
             switch (match) {
@@ -126,11 +134,11 @@ public class SegmentSystem extends BaseComponentSystem {
                     break;
                 case Start_Start:
                     segmentMeta.position = 0;
-                    delta *= -1;
+                    d *= -1;
                     segmentMeta.sign *= -1;
                     break;
                 case End_End:
-                    delta *= -1;
+                    d *= -1;
                     segmentMeta.position = nextSegment.maxDistance();
                     segmentMeta.sign *= -1;
                     break;
@@ -165,12 +173,12 @@ public class SegmentSystem extends BaseComponentSystem {
     public Vector3f segmentPosition(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-            return blockComponent.getPosition().toVector3f();
+            return JomlUtil.from(blockComponent.getPosition().toVector3f());
         }
         if (entity.hasComponent(LocationComponent.class)) {
-            return entity.getComponent(LocationComponent.class).getWorldPosition();
+            return JomlUtil.from(entity.getComponent(LocationComponent.class).getWorldPosition());
         }
-        return Vector3f.zero();
+        return new Vector3f();
     }
 
     /**
@@ -179,7 +187,7 @@ public class SegmentSystem extends BaseComponentSystem {
      * @param meta Segment we want to get rotation of
      * @return Rotation of the segment
      */
-    public Quat4f segmentRotation(SegmentMeta meta) {
+    public Quaternionf segmentRotation(SegmentMeta meta) {
         return segmentRotation(meta.association);
     }
 
@@ -189,18 +197,18 @@ public class SegmentSystem extends BaseComponentSystem {
      * @param entity Segment we want to get rotation of
      * @return Rotation of the segment
      */
-    public Quat4f segmentRotation(EntityRef entity) {
+    public Quaternionf segmentRotation(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
             BlockFamily blockFamily = blockComponent.getBlock().getBlockFamily();
             if (blockFamily instanceof PathFamily) {
                 Rotation rotation = ((PathFamily) blockFamily).getRotationFor(blockComponent.getBlock().getURI());
-                return rotation.getQuat4f();
+                return JomlUtil.from(rotation.getQuat4f());
             }
         }
         if (entity.hasComponent(LocationComponent.class)) {
-            return entity.getComponent(LocationComponent.class).getWorldRotation();
+            return JomlUtil.from(entity.getComponent(LocationComponent.class).getWorldRotation());
         }
-        return new Quat4f(Quat4f.IDENTITY);
+        return new Quaternionf();
     }
 }

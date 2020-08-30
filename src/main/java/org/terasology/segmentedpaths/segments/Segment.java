@@ -15,8 +15,8 @@
  */
 package org.terasology.segmentedpaths.segments;
 
-import org.terasology.math.geom.Quat4f;
-import org.terasology.math.geom.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 /**
  * Represents a segment traversable by an entity that has the {@link PathFollowerComponent}. Contiguous segments are put together to
@@ -56,7 +56,7 @@ public interface Segment {
      * @param segmentRotation The rotation of the segment.
      * @return The segment position of the closest point.
      */
-    float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quat4f segmentRotation);
+    float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quaternionf segmentRotation);
 
     /**
      * Returns the length of this segment.
@@ -82,7 +82,7 @@ public interface Segment {
      * @param rotation The rotation of the segment.
      * @return The tangent to the segment.
      */
-    Vector3f tangent(int index, float t, Quat4f rotation);
+    Vector3f tangent(int index, float t, Quaternionf rotation);
 
     /**
      * Returns the position of a point on the segment at the given subsegment index and position.
@@ -102,7 +102,7 @@ public interface Segment {
      * @param rotation The rotation of the segment.
      * @return The position of the point on the segment.
      */
-    Vector3f point(int index, float t, Vector3f position, Quat4f rotation);
+    Vector3f point(int index, float t, Vector3f position, Quaternionf rotation);
 
     /**
      * Returns the normal to the segment at the given subsegment index and point.
@@ -121,6 +121,6 @@ public interface Segment {
      * @param rotation The rotation of the segment.
      * @return The normal to the segment.
      */
-    Vector3f normal(int index, float t, Quat4f rotation);
+    Vector3f normal(int index, float t, Quaternionf rotation);
 
 }
