@@ -15,9 +15,9 @@
  */
 package org.terasology.segmentedpaths.segments;
 
-import org.terasology.math.TeraMath;
-import org.terasology.math.geom.Quat4f;
-import org.terasology.math.geom.Vector3f;
+import org.joml.Math;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.terasology.segmentedpaths.components.LinearPathComponent;
 
 /**
@@ -30,16 +30,17 @@ public class LinearSegment implements Segment {
     private LinearPathComponent.Linear[] linearPoints;
 
     public LinearSegment(LinearPathComponent.Linear[] points) {
-        if (points.length < 2)
+        if (points.length < 2) {
             return;
+        }
         this.linearPoints = points;
-        CalculateLength();
+        calculateLength();
     }
 
     /**
      * Calculates lengths and tagets for all the subsegments in this segment.
      */
-    public void CalculateLength() {
+    public void calculateLength() {
 
         this.tangents = new Vector3f[linearPoints.length - 1];
         this.arcLengths = new float[linearPoints.length - 1];
@@ -81,9 +82,10 @@ public class LinearSegment implements Segment {
     }
 
     @Override
-    public float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quat4f segmentRotation) {
-        if (this.linearPoints.length == 0)
+    public float nearestSegmentPosition(Vector3f pos, Vector3f segmentPosition, Quaternionf segmentRotation) {
+        if (this.linearPoints.length == 0) {
             return 0f;
+        }
 
         float result = 0;
         float closest = Float.MAX_VALUE;
@@ -117,19 +119,19 @@ public class LinearSegment implements Segment {
     }
 
     @Override
-    public Vector3f tangent(int index, float t, Quat4f rotation) {
-        return rotation.rotate(this.tangent(index, t));
+    public Vector3f tangent(int index, float t, Quaternionf rotation) {
+        return rotation.transform(this.tangent(index, t));
     }
 
     @Override
     public Vector3f point(int index, float t) {
-        t = TeraMath.clamp(t, 0, 1f);
-        return new Vector3f(linearPoints[index].point).add(new Vector3f(this.arc[index]).mul(t));
+        float value = Math.clamp(t, 0, 1f);
+        return new Vector3f(linearPoints[index].point).add(new Vector3f(this.arc[index]).mul(value));
     }
 
     @Override
-    public Vector3f point(int index, float t, Vector3f position, Quat4f rotation) {
-        return rotation.rotate(point(index, t)).add(position);
+    public Vector3f point(int index, float t, Vector3f position, Quaternionf rotation) {
+        return rotation.transform(point(index, t)).add(position);
     }
 
     @Override
@@ -140,11 +142,11 @@ public class LinearSegment implements Segment {
         Vector3f n1 = new Vector3f().cross(tangents[index], b1);
         Vector3f n2 = new Vector3f().cross(tangents[index], b2);
 
-        return Vector3f.lerp(n1, n2, t);
+        return n1.lerp(n2, t); //Vector3f.lerp(n1, n2, t);
     }
 
     @Override
-    public Vector3f normal(int index, float t, Quat4f rotation) {
-        return rotation.rotate(normal(index, t));
+    public Vector3f normal(int index, float t, Quaternionf rotation) {
+        return rotation.transform(normal(index, t));
     }
 }
