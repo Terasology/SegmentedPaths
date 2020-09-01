@@ -99,22 +99,25 @@ public class SegmentSystem extends BaseComponentSystem {
     public boolean updateSegmentMeta(SegmentMeta segmentMeta, float delta, SegmentMapping mapping) {
 
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
-        float d = delta;
+
         while (true) {
-            if (Math.abs(d) < Float.MIN_VALUE) {
+            if (Math.abs(delta) < Float.MIN_VALUE) {
                 return true;
+            }
+            if (!org.joml.Math.isFinite(delta)) {
+                return false;
             }
 
-            if (d + segmentMeta.position > 0 && d + segmentMeta.position < segment.maxDistance()) {
-                segmentMeta.position = d + segmentMeta.position;
+
+            if (delta + segmentMeta.position > 0 && delta + segmentMeta.position < segment.maxDistance()) {
+                segmentMeta.position = delta + segmentMeta.position;
                 return true;
             }
-            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, d < 0 ?
-                SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
-            if (d < 0) {
-                d -= segmentMeta.position * Math.signum(d);
+            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
+            if (delta < 0) {
+                delta -= segmentMeta.position * java.lang.Math.signum(delta);
             } else {
-                d -= (segment.maxDistance() - segmentMeta.position) * Math.signum(d);
+                delta -= (segment.maxDistance() - segmentMeta.position) * Math.signum(delta);
             }
 
             if (mappingResult == null) {
@@ -134,11 +137,11 @@ public class SegmentSystem extends BaseComponentSystem {
                     break;
                 case Start_Start:
                     segmentMeta.position = 0;
-                    d *= -1;
+                    delta *= -1;
                     segmentMeta.sign *= -1;
                     break;
                 case End_End:
-                    d *= -1;
+                    delta *= -1;
                     segmentMeta.position = nextSegment.maxDistance();
                     segmentMeta.sign *= -1;
                     break;
