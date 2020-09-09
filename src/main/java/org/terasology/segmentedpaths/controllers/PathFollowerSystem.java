@@ -1,29 +1,15 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.segmentedpaths.controllers;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.segmentedpaths.segments.CurvedSegment;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
 import org.terasology.segmentedpaths.SegmentMeta;
 import org.terasology.segmentedpaths.components.PathFollowerComponent;
 import org.terasology.segmentedpaths.events.OnExitSegment;
@@ -103,7 +89,8 @@ public class PathFollowerSystem extends BaseComponentSystem {
             int index = segment.index(vehicle.segmentMeta.position);
             Quat4f rotation = segmentSystem.segmentRotation(vehicle.segmentMeta);
             Vector3f position = segmentSystem.segmentPosition(vehicle.segmentMeta);
-            return segment.point(index, segment.getSegmentPosition(index, vehicle.segmentMeta.position), position, rotation);
+            return segment.point(index, segment.getSegmentPosition(index, vehicle.segmentMeta.position), position,
+                    rotation);
         }
         SegmentMeta meta = new SegmentMeta(vehicle.segmentMeta);
         if (this.segmentSystem.updateSegmentMeta(meta, vehicle.segmentMeta.sign * delta, mapping)) {
@@ -166,9 +153,7 @@ public class PathFollowerSystem extends BaseComponentSystem {
             return false;
         if (vehicle.segmentMeta.association == null)
             return false;
-        if (!vehicle.segmentMeta.association.exists())
-            return false;
-        return true;
+        return vehicle.segmentMeta.association.exists();
     }
 
     /**
@@ -185,7 +170,8 @@ public class PathFollowerSystem extends BaseComponentSystem {
         PathFollowerComponent vehicle = vehicleEntity.getComponent(PathFollowerComponent.class);
         EntityRef previous = vehicle.segmentMeta.association;
         vehicle.heading = this.vehicleTangent(vehicleEntity).mul(vehicle.segmentMeta.sign);
-        boolean result = segmentSystem.updateSegmentMeta(vehicle.segmentMeta, vehicle.segmentMeta.sign * delta, mapping);
+        boolean result = segmentSystem.updateSegmentMeta(vehicle.segmentMeta, vehicle.segmentMeta.sign * delta,
+                mapping);
         if (previous != vehicle.segmentMeta.association) {
             previous.send(new OnExitSegment(vehicleEntity));
             vehicle.segmentMeta.association.send(new OnVisitSegment(vehicleEntity));

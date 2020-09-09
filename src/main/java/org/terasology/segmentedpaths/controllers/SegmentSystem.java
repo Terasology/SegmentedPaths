@@ -1,56 +1,30 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.segmentedpaths.controllers;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.Rotation;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.math.Rotation;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.world.block.BlockComponent;
+import org.terasology.engine.world.block.family.BlockFamily;
 import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.segmentedpaths.segments.CurvedSegment;
 import org.terasology.segmentedpaths.SegmentMeta;
 import org.terasology.segmentedpaths.blocks.PathFamily;
 import org.terasology.segmentedpaths.segments.Segment;
-import org.terasology.world.block.BlockComponent;
-import org.terasology.world.block.family.BlockFamily;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(value = SegmentSystem.class)
 public class SegmentSystem extends BaseComponentSystem {
     /**
-     * Enum representing possible combinations of ends segments may be connected by.
-     */
-    public enum JointMatch {
-        Start_End,
-        Start_Start,
-        End_End,
-        End_Start,
-        None
-    }
-
-    /**
      * The maximum deviation of two points to be from each other for them to be considered matching.
      */
     public static final float MATCH_EPSILON = .09f * .09f;
-
     @In
     private SegmentCacheSystem segmentCacheSystem;
 
@@ -96,14 +70,15 @@ public class SegmentSystem extends BaseComponentSystem {
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
 
         while (true) {
-            if(Math.abs(delta) < Float.MIN_VALUE)
+            if (Math.abs(delta) < Float.MIN_VALUE)
                 return true;
 
             if (delta + segmentMeta.position > 0 && delta + segmentMeta.position < segment.maxDistance()) {
                 segmentMeta.position = delta + segmentMeta.position;
                 return true;
             }
-            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
+            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, delta < 0 ?
+                    SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
             if (delta < 0) {
                 delta -= segmentMeta.position * Math.signum(delta);
             } else {
@@ -202,5 +177,16 @@ public class SegmentSystem extends BaseComponentSystem {
             return entity.getComponent(LocationComponent.class).getWorldRotation();
         }
         return new Quat4f(Quat4f.IDENTITY);
+    }
+
+    /**
+     * Enum representing possible combinations of ends segments may be connected by.
+     */
+    public enum JointMatch {
+        Start_End,
+        Start_Start,
+        End_End,
+        End_Start,
+        None
     }
 }

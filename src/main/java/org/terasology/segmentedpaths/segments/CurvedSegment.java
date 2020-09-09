@@ -1,18 +1,5 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.segmentedpaths.segments;
 
 import org.terasology.math.TeraMath;
@@ -23,16 +10,16 @@ import org.terasology.segmentedpaths.components.CurvedPathComponent;
 /**
  * An implementation of {@code Segment} representing segment composed of curves.
  */
-public class CurvedSegment implements Segment{
+public class CurvedSegment implements Segment {
 
     public static final int ARC_SEGMENT_ITERATIONS = 100;
 
-    private CurvedPathComponent.CubicBezier[] curves;
-    private float[] arcLengths;
+    private final CurvedPathComponent.CubicBezier[] curves;
+    private final float[] arcLengths;
     private float[][] arcSamples;
 
-    private Vector3f startingBinormal;
-    private Vector3f startingNormal;
+    private final Vector3f startingBinormal;
+    private final Vector3f startingNormal;
 
     public CurvedSegment(CurvedPathComponent.CubicBezier[] curves, Vector3f startingBinormal) {
         this.curves = curves;
@@ -53,7 +40,7 @@ public class CurvedSegment implements Segment{
         if (this.curves.length == 0)
             return;
 
-        arcSamples = new float[this.curves.length][ARC_SEGMENT_ITERATIONS+1];
+        arcSamples = new float[this.curves.length][ARC_SEGMENT_ITERATIONS + 1];
 
         float distance = 0f;
 
@@ -65,7 +52,7 @@ public class CurvedSegment implements Segment{
         for (int x = 0; x < curves.length; x++) {
 
             for (int y = 0; y <= ARC_SEGMENT_ITERATIONS; y++) {
-                Vector3f current = point(x, y / (float)ARC_SEGMENT_ITERATIONS);
+                Vector3f current = point(x, y / (float) ARC_SEGMENT_ITERATIONS);
                 distance += current.distance(previous);
                 arcSamples[x][y] = distance;
                 previous = current;
@@ -94,14 +81,12 @@ public class CurvedSegment implements Segment{
 
     @Override
     public float getSegmentPosition(int index, float segmentPosition) {
-        for(int x = 0; x < arcSamples[index].length; x++)
-        {
-            if(segmentPosition < arcSamples[index][x])
-            {
-                return x/((float)ARC_SEGMENT_ITERATIONS);
+        for (int x = 0; x < arcSamples[index].length; x++) {
+            if (segmentPosition < arcSamples[index][x]) {
+                return x / ((float) ARC_SEGMENT_ITERATIONS);
             }
         }
-        return  1.0f;
+        return 1.0f;
     }
 
     @Override
@@ -116,7 +101,7 @@ public class CurvedSegment implements Segment{
         Vector3f previous = point(0, 0, segmentPosition, segmentRotation);
         for (int x = 0; x < curves.length; x++) {
             for (int y = 0; y <= ARC_SEGMENT_ITERATIONS; y++) {
-                Vector3f current = point(x, y / (float)ARC_SEGMENT_ITERATIONS, segmentPosition, segmentRotation);
+                Vector3f current = point(x, y / (float) ARC_SEGMENT_ITERATIONS, segmentPosition, segmentRotation);
                 tvalue += current.distance(previous);
                 previous = current;
 
@@ -185,8 +170,6 @@ public class CurvedSegment implements Segment{
     public Vector3f normal(int index, float t, Quat4f rotation) {
         return rotation.rotate(normal(index, t));
     }
-
-
 
 
 }
