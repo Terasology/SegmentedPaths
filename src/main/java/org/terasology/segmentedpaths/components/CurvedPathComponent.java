@@ -4,7 +4,7 @@ package org.terasology.segmentedpaths.components;
 
 import org.terasology.engine.entitySystem.Component;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.reflection.MappedContainer;
+import org.terasology.nui.reflection.MappedContainer;
 
 import java.util.List;
 

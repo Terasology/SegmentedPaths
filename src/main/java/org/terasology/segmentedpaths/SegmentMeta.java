@@ -5,7 +5,7 @@ package org.terasology.segmentedpaths;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.network.Replicate;
-import org.terasology.reflection.MappedContainer;
+import org.terasology.nui.reflection.MappedContainer;
 
 @MappedContainer
 public class SegmentMeta {
