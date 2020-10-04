@@ -99,25 +99,26 @@ public class SegmentSystem extends BaseComponentSystem {
     public boolean updateSegmentMeta(SegmentMeta segmentMeta, float delta, SegmentMapping mapping) {
 
         Segment segment = segmentCacheSystem.getSegment(segmentMeta.prefab);
-
+        float deltaTemp = delta;
         while (true) {
-            if (Math.abs(delta) < Float.MIN_VALUE) {
+            if (Math.abs(deltaTemp) < Float.MIN_VALUE) {
                 return true;
             }
-            if (!org.joml.Math.isFinite(delta)) {
+            if (!org.joml.Math.isFinite(deltaTemp)) {
                 return false;
             }
 
 
-            if (delta + segmentMeta.position > 0 && delta + segmentMeta.position < segment.maxDistance()) {
-                segmentMeta.position = delta + segmentMeta.position;
+            if (deltaTemp + segmentMeta.position > 0 && deltaTemp + segmentMeta.position < segment.maxDistance()) {
+                segmentMeta.position = deltaTemp + segmentMeta.position;
                 return true;
             }
-            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, delta < 0 ? SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
-            if (delta < 0) {
-                delta -= segmentMeta.position * java.lang.Math.signum(delta);
+            SegmentMapping.MappingResult mappingResult = mapping.nextSegment(segmentMeta, deltaTemp < 0 ?
+                SegmentMapping.SegmentEnd.START : SegmentMapping.SegmentEnd.END);
+            if (deltaTemp < 0) {
+                deltaTemp -= segmentMeta.position * java.lang.Math.signum(deltaTemp);
             } else {
-                delta -= (segment.maxDistance() - segmentMeta.position) * Math.signum(delta);
+                deltaTemp -= (segment.maxDistance() - segmentMeta.position) * Math.signum(deltaTemp);
             }
 
             if (mappingResult == null) {
@@ -137,11 +138,11 @@ public class SegmentSystem extends BaseComponentSystem {
                     break;
                 case Start_Start:
                     segmentMeta.position = 0;
-                    delta *= -1;
+                    deltaTemp *= -1;
                     segmentMeta.sign *= -1;
                     break;
                 case End_End:
-                    delta *= -1;
+                    deltaTemp *= -1;
                     segmentMeta.position = nextSegment.maxDistance();
                     segmentMeta.sign *= -1;
                     break;
@@ -176,10 +177,10 @@ public class SegmentSystem extends BaseComponentSystem {
     public Vector3f segmentPosition(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-            return JomlUtil.from(blockComponent.getPosition().toVector3f());
+            return JomlUtil.from(blockComponent.position.toVector3f());
         }
         if (entity.hasComponent(LocationComponent.class)) {
-            return JomlUtil.from(entity.getComponent(LocationComponent.class).getWorldPosition());
+            return entity.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
         }
         return new Vector3f();
     }
@@ -203,14 +204,14 @@ public class SegmentSystem extends BaseComponentSystem {
     public Quaternionf segmentRotation(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-            BlockFamily blockFamily = blockComponent.getBlock().getBlockFamily();
+            BlockFamily blockFamily = blockComponent.block.getBlockFamily();
             if (blockFamily instanceof PathFamily) {
-                Rotation rotation = ((PathFamily) blockFamily).getRotationFor(blockComponent.getBlock().getURI());
-                return JomlUtil.from(rotation.getQuat4f());
+                Rotation rotation = ((PathFamily) blockFamily).getRotationFor(blockComponent.block.getURI());
+                return new Quaternionf(rotation.orientation());
             }
         }
         if (entity.hasComponent(LocationComponent.class)) {
-            return JomlUtil.from(entity.getComponent(LocationComponent.class).getWorldRotation());
+            return entity.getComponent(LocationComponent.class).getWorldRotation(new Quaternionf());
         }
         return new Quaternionf();
     }
