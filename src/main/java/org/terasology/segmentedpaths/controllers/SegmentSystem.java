@@ -17,6 +17,7 @@ package org.terasology.segmentedpaths.controllers;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -176,10 +177,10 @@ public class SegmentSystem extends BaseComponentSystem {
     public Vector3f segmentPosition(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-            return JomlUtil.from(blockComponent.getPosition().toVector3f());
+            return new Vector3f(blockComponent.getPosition(new Vector3i()));
         }
         if (entity.hasComponent(LocationComponent.class)) {
-            return JomlUtil.from(entity.getComponent(LocationComponent.class).getWorldPosition());
+            return entity.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
         }
         return new Vector3f();
     }
