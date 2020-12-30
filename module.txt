@@ -1,10 +1,10 @@
 {
-    "id": "SegmentedPaths",
-    "version": "1.0.0",
-    "author": "The Terasology Foundation",
-    "displayName": "SegmentedPaths",
-    "description": "A library module to generically describe paths composed of segments based on bezier curves.",
-    "dependencies": [],
-    "serverSideOnly": false,
-    "isLibrary": true
+  "id": "SegmentedPaths",
+  "version": "1.1.0-SNAPSHOT",
+  "author": "The Terasology Foundation",
+  "displayName": "SegmentedPaths",
+  "description": "A library module to generically describe paths composed of segments based on bezier curves.",
+  "dependencies": [],
+  "serverSideOnly": false,
+  "isLibrary": true
 }
