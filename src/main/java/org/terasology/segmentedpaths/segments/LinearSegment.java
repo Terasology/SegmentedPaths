@@ -58,8 +58,9 @@ public class LinearSegment implements Segment {
 
     @Override
     public int index(float segmentPosition) {
-        if (segmentPosition < 0)
+        if (segmentPosition < 0) {
             return 0;
+        }
         for (int x = 0; x < arcLengths.length; x++) {
             if (segmentPosition < arcLengths[x]) {
                 return x;
