@@ -23,7 +23,6 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.JomlUtil;
 import org.terasology.math.Rotation;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
