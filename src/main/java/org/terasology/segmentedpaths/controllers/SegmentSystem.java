@@ -204,9 +204,9 @@ public class SegmentSystem extends BaseComponentSystem {
     public Quaternionf segmentRotation(EntityRef entity) {
         if (entity.hasComponent(BlockComponent.class)) {
             BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-            BlockFamily blockFamily = blockComponent.block.getBlockFamily();
+            BlockFamily blockFamily = blockComponent.getBlock().getBlockFamily();
             if (blockFamily instanceof PathFamily) {
-                Rotation rotation = ((PathFamily) blockFamily).getRotationFor(blockComponent.block.getURI());
+                Rotation rotation = ((PathFamily) blockFamily).getRotationFor(blockComponent.getBlock().getURI());
                 return new Quaternionf(rotation.orientation());
             }
         }
