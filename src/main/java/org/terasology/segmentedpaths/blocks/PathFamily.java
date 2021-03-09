@@ -15,8 +15,8 @@
  */
 package org.terasology.segmentedpaths.blocks;
 
-import org.terasology.math.Rotation;
-import org.terasology.world.block.BlockUri;
+import org.terasology.engine.math.Rotation;
+import org.terasology.engine.world.block.BlockUri;
 
 /**
  * To be implemented by blocks that use the segment system.

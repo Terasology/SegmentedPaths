@@ -15,14 +15,14 @@
  */
 package org.terasology.segmentedpaths.controllers;
 
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.registry.Share;
+import org.terasology.segmentedpaths.components.CurvedPathComponent;
 import org.terasology.segmentedpaths.components.LinearPathComponent;
 import org.terasology.segmentedpaths.segments.CurvedSegment;
-import org.terasology.segmentedpaths.components.CurvedPathComponent;
-import org.terasology.registry.Share;
 import org.terasology.segmentedpaths.segments.LinearSegment;
 import org.terasology.segmentedpaths.segments.Segment;
 

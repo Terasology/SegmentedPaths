@@ -15,8 +15,8 @@
  */
 package org.terasology.segmentedpaths.events;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.Event;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.Event;
 
 /**
  * Event called when an entity that has {@link org.terasology.segmentedpaths.components.PathFollowerComponent} enters a segment.
