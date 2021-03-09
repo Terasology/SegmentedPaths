@@ -60,7 +60,7 @@ public class SegmentCacheSystem extends BaseComponentSystem {
 
             CurvedPathComponent.CubicBezier[] c = new CurvedPathComponent.CubicBezier[pathComponent.path.size()];
             pathComponent.path.toArray(c);
-            segment = new CurvedSegment(c, pathComponent.startingBinormal);
+            segment = new CurvedSegment(c, pathComponent.binormal);
             segments.put(prefab.getName(), segment);
         } else if (prefab.hasComponent(LinearPathComponent.class)) {
             LinearPathComponent pathComponent = prefab.getComponent(LinearPathComponent.class);

@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class CurvedPathComponent implements Component {
     public List<CurvedPathComponent.CubicBezier> path;
-    public Vector3f startingBinormal;
+    public Vector3f binormal;
     public float rotation;
 
     @MappedContainer

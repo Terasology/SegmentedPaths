@@ -13,7 +13,7 @@
              }
 
          ],
-         "startingBinormal": [0,0,-1],
+         "binormal": [0,0,-1],
          "rotation" : 0
     }
 
