@@ -140,10 +140,10 @@ public class LinearSegment implements Segment {
         Vector3f b1 = linearPoints[index].binormal;
         Vector3f b2 = linearPoints[index + 1].binormal;
 
-        Vector3f n1 = new Vector3f().cross(tangents[index], b1);
-        Vector3f n2 = new Vector3f().cross(tangents[index], b2);
+        Vector3f n1 = tangents[index].cross(b1, new Vector3f());
+        Vector3f n2 = tangents[index].cross(b2, new Vector3f());
 
-        return n1.lerp(n2, t); //Vector3f.lerp(n1, n2, t);
+        return n1.lerp(n2, t);
     }
 
     @Override

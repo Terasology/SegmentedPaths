@@ -18,6 +18,7 @@ package org.terasology.segmentedpaths.segments;
 import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.terasology.math.TeraMath;
 import org.terasology.segmentedpaths.components.CurvedPathComponent;
 
@@ -32,18 +33,17 @@ public class CurvedSegment implements Segment {
     private float[] arcLengths;
     private float[][] arcSamples;
 
-    private Vector3f startingBinormal;
-    private Vector3f startingNormal;
+    private Vector3fc startingBinormal;
+    private Vector3fc startingNormal;
 
-    public CurvedSegment(CurvedPathComponent.CubicBezier[] curves, Vector3f startingBinormal) {
+    public CurvedSegment(CurvedPathComponent.CubicBezier[] curves, Vector3fc startingBinormal) {
         this.curves = curves;
         this.startingBinormal = startingBinormal;
         this.arcLengths = new float[this.curves.length];
-        Vector3f normal = new Vector3f();
-        normal.cross(tangent(0, 0), startingBinormal);
-        this.startingNormal = normal;
 
         calculateLength();
+
+        this.startingNormal = tangent(0, 0).cross(startingBinormal, new Vector3f());
 
     }
 
@@ -60,10 +60,6 @@ public class CurvedSegment implements Segment {
         float distance = 0f;
 
         Vector3f previous = point(0, 0);// curves[0].getPoint(0);
-
-        Vector3f normal = new Vector3f();
-        normal.cross(tangent(0, 0), startingBinormal);
-
         for (int x = 0; x < curves.length; x++) {
 
             for (int y = 0; y <= ARC_SEGMENT_ITERATIONS; y++) {
@@ -178,7 +174,7 @@ public class CurvedSegment implements Segment {
         Vector3f startingTangent = tangent(0, 0);
         Vector3f tangent = tangent(index, t);
         Quaternionf arcCurve = new Quaternionf().rotateTo(startingTangent, tangent);
-        return arcCurve.transform(startingNormal);
+        return arcCurve.transform(startingNormal, new Vector3f());
     }
 
     @Override
