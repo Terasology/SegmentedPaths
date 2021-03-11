@@ -15,8 +15,8 @@
  */
 package org.terasology.segmentedpaths.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.math.Side;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.math.Side;
 
 /**
  * Created by michaelpollind on 4/3/17.

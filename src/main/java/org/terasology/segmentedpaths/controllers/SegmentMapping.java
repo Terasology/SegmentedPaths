@@ -15,8 +15,8 @@
  */
 package org.terasology.segmentedpaths.controllers;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.segmentedpaths.SegmentMeta;
 
 /**
