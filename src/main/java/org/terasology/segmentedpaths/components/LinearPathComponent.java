@@ -1,31 +1,34 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.segmentedpaths.components;
 
 import org.joml.Vector3f;
-import org.terasology.engine.entitySystem.Component;
+import org.terasology.gestalt.entitysystem.component.Component;
 import org.terasology.reflection.MappedContainer;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class LinearPathComponent implements Component {
+public class LinearPathComponent implements Component<LinearPathComponent> {
     public List<Linear> path;
+
+    @Override
+    public void copy(LinearPathComponent other) {
+        this.path = other.path.stream()
+                .map(Linear::copy)
+                .collect(Collectors.toList());
+    }
+
     @MappedContainer
     public static class Linear {
         public Vector3f point;
         public Vector3f binormal;
+
+        private Linear copy() {
+            Linear linear = new Linear();
+            linear.point = new Vector3f(point);
+            linear.binormal = new Vector3f(binormal);
+            return linear;
+        }
     }
 }
