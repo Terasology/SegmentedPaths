@@ -18,7 +18,7 @@ public class CurvedPathComponent implements Component<CurvedPathComponent> {
     public float rotation;
 
     @Override
-    public void copy(CurvedPathComponent other) {
+    public void copyFrom(CurvedPathComponent other) {
         this.path = other.path.stream()
                 .map(CubicBezier::copy)
                 .collect(Collectors.toList());

@@ -17,7 +17,7 @@ public class PathFollowerComponent implements Component<PathFollowerComponent> {
     public Vector3f heading;
 
     @Override
-    public void copy(PathFollowerComponent other) {
+    public void copyFrom(PathFollowerComponent other) {
         this.segmentMeta = new SegmentMeta(other.segmentMeta);
         this.segmentMeta.sign = other.segmentMeta.sign;
         this.heading = new Vector3f(other.heading);

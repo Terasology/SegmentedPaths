@@ -16,7 +16,7 @@ public class PathDescriptorComponent implements Component<PathDescriptorComponen
     public List<Prefab> descriptors;
 
     @Override
-    public void copy(PathDescriptorComponent other) {
+    public void copyFrom(PathDescriptorComponent other) {
         this.descriptors = Lists.newArrayList(other.descriptors);
     }
 }

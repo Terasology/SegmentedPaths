@@ -13,7 +13,7 @@ public class BlockMappingComponent implements Component<BlockMappingComponent> {
     public Side s2;
 
     @Override
-    public void copy(BlockMappingComponent other) {
+    public void copyFrom(BlockMappingComponent other) {
         this.s1 = other.s1;
         this.s2 = other.s2;
     }

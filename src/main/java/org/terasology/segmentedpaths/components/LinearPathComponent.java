@@ -13,7 +13,7 @@ public class LinearPathComponent implements Component<LinearPathComponent> {
     public List<Linear> path;
 
     @Override
-    public void copy(LinearPathComponent other) {
+    public void copyFrom(LinearPathComponent other) {
         this.path = other.path.stream()
                 .map(Linear::copy)
                 .collect(Collectors.toList());
