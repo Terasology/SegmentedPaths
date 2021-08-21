@@ -32,7 +32,7 @@ import org.terasology.segmentedpaths.SegmentMeta;
 import org.terasology.segmentedpaths.blocks.PathFamily;
 import org.terasology.segmentedpaths.segments.Segment;
 
-@RegisterSystem(RegisterMode.AUTHORITY)
+@RegisterSystem(RegisterMode.ALWAYS)
 @Share(value = SegmentSystem.class)
 public class SegmentSystem extends BaseComponentSystem {
     /**

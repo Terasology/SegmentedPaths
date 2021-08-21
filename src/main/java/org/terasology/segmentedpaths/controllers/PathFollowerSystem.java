@@ -32,7 +32,7 @@ import org.terasology.segmentedpaths.segments.Segment;
 /**
  * A class for working with entities following a path.
  */
-@RegisterSystem(RegisterMode.AUTHORITY)
+@RegisterSystem(RegisterMode.ALWAYS)
 @Share(value = PathFollowerSystem.class)
 public class PathFollowerSystem extends BaseComponentSystem {
     @In
