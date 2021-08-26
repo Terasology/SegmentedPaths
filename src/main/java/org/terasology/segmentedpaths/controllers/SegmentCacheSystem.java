@@ -31,7 +31,7 @@ import java.util.HashMap;
 /**
  * Cache system for segments. Constructs, stores and supplies segments based off their prefabs.
  */
-@RegisterSystem(RegisterMode.AUTHORITY)
+@RegisterSystem(RegisterMode.ALWAYS)
 @Share(value = SegmentCacheSystem.class)
 public class SegmentCacheSystem extends BaseComponentSystem {
 
